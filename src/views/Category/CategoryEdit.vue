@@ -22,6 +22,9 @@ export default {
       model: {}
     };
   },
+  created() {
+    this.id && this.fetch();
+  },
   methods: {
     async save() {
       if (this.id) {
@@ -43,9 +46,6 @@ export default {
       const res = await this.$http.get(`/rest/category/${this.id}`);
       this.model = res.data;
     }
-  },
-  created() {
-    this.id && this.fetch();
   }
 };
 </script>

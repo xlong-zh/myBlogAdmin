@@ -26,26 +26,21 @@
     </el-table>
   </div>
 </template>
-
 <script>
 export default {
   data() {
     return {
       model: []
-      // new Array(5).fill(1).map(v => ({
-      //   name: "aaa",
-      //   title: "123",
-      //   category: "BBB",
-      //   content: "CCC"
-      // }))
     };
+  },
+    created() {
+    this.fetch();
   },
   computed: {},
   methods: {
     async fetch() {
       const res = await this.$http.get(`/rest/article`);
       this.model = res.data;
-      // console.log(this.model);
     },
     async remove(row) {
       this.$confirm(`是否确认删除${row.name}`, "提示", {
@@ -69,10 +64,7 @@ export default {
         });
     }
   },
-  created() {
-    this.fetch();
-    // console.log(this.model);
-  }
+
 };
 </script>
 <style lang='scss' scoped>

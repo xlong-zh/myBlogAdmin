@@ -35,7 +35,6 @@
     </el-form>
   </div>
 </template>
-
 <script>
 export default {
   props: {
@@ -46,6 +45,10 @@ export default {
       model: {},
       category: []
     };
+  },
+  created() {
+    this.id && this.fetch();
+    this.fetchCategory();
   },
   methods: {
     afterUpload(res) {
@@ -75,10 +78,6 @@ export default {
       const res = await this.$http.get(`/rest/category`);
       this.category = res.data;
     }
-  },
-  created() {
-    this.id && this.fetch();
-    this.fetchCategory();
   }
 };
 </script>
