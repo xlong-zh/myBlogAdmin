@@ -1,17 +1,17 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Home from './views/Home.vue'
-import Login from './views/Login.vue'
-import CategoryEdit from './views/CategoryEdit.vue'
-import CategoryList from './views/CategoryList.vue'
-import ArticleEdit from './views/ArticleEdit.vue'
-import ArticleList from './views/ArticleList.vue'
-import UserEdit from './views/UserEdit.vue'
-import UserList from './views/UserList.vue'
-import ImageEdit from './views/ImageEdit.vue'
-import ImageList from './views/ImageList.vue'
+import Vue from 'vue';
+import Router from 'vue-router';
+import Home from '@views/Home.vue';
+import Login from '@views/Login.vue';
+import CategoryEdit from '@views/Category/CategoryEdit.vue';
+import CategoryList from '@views/Category/CategoryList.vue';
+import ArticleEdit from '@views/Article/ArticleEdit.vue';
+import ArticleList from '@views/Article/ArticleList.vue';
+import UserEdit from '@views/User/UserEdit.vue';
+import UserList from '@views/User/UserList.vue';
+import ImageEdit from '@views/Image/ImageEdit.vue';
+import ImageList from '@views/Image/ImageList.vue';
 
-Vue.use(Router)
+Vue.use(Router);
 
 const router = new Router({
   // mode: 'history',
@@ -33,7 +33,7 @@ const router = new Router({
         {
           path: '/category/create',
           name: 'category-c',
-          component: CategoryEdit,
+          component: CategoryEdit
         },
         {
           path: '/category/edit/:id',
@@ -44,13 +44,13 @@ const router = new Router({
         {
           path: '/category/list',
           name: 'category-l',
-          component: CategoryList,
+          component: CategoryList
         },
 
         {
           path: '/article/create',
           name: 'article-c',
-          component: ArticleEdit,
+          component: ArticleEdit
         },
         {
           path: '/article/edit/:id',
@@ -61,12 +61,12 @@ const router = new Router({
         {
           path: '/article/list',
           name: 'article-l',
-          component: ArticleList,
+          component: ArticleList
         },
         {
           path: '/user/create',
           name: 'user-c',
-          component: UserEdit,
+          component: UserEdit
         },
         {
           path: '/user/edit/:id',
@@ -77,13 +77,13 @@ const router = new Router({
         {
           path: '/user/list',
           name: 'user-d',
-          component: UserList,
+          component: UserList
         },
 
         {
           path: '/image/create',
           name: 'image-c',
-          component: ImageEdit,
+          component: ImageEdit
         },
         {
           path: '/image/edit/:id',
@@ -94,10 +94,10 @@ const router = new Router({
         {
           path: '/image/list',
           name: 'image-d',
-          component: ImageList,
-        },
+          component: ImageList
+        }
       ]
-    },
+    }
     // {
     //   path: '/about',
     //   name: 'about',
@@ -107,13 +107,13 @@ const router = new Router({
     //   component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
     // }
   ]
-})
+});
 router.beforeEach((to, from, next) => {
   if (!to.meta.isPublic && !localStorage.token) {
-    console.log('123')
-    return next('/login')
+    console.log('123');
+    return next('/login');
   }
-  next()
-})
+  next();
+});
 
-export default router
+export default router;
