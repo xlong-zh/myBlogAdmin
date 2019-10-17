@@ -27,7 +27,8 @@ export default {
   },
   methods: {
     async fetch() {
-      const res = await this.$http.get(`/rest/user`);
+      // const res = await this.$http.get(`/rest/user`);
+      const res = await getAction(`/rest/user`, {});
       this.items = res.data;
     },
     async remove(row) {
@@ -37,7 +38,8 @@ export default {
         type: "warning"
       })
         .then(async () => {
-          const res = await this.$http.delete(`/rest/user/${row._id}`);
+          // const res = await this.$http.delete(`/rest/user/${row._id}`);
+          const res = await deleteAction(`/rest/user`, row._id);
           this.$message({
             type: "success",
             message: "删除成功!"
