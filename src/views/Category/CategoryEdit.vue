@@ -28,12 +28,12 @@ export default {
   methods: {
     async save() {
       if (this.id) {
-        const res = await this.$http.put(
+        const res = await this.$http.putAction(
           `/rest/category/${this.id}`,
           this.model
         );
       } else {
-        const res = await this.$http.post(`/rest/category`, this.model);
+        const res = await this.$http.postAction(`/rest/category`, this.model);
       }
       this.$router.push("/category/list");
       this.$message({
@@ -43,7 +43,7 @@ export default {
     },
 
     async fetch() {
-      const res = await this.$http.get(`/rest/category/${this.id}`);
+      const res = await this.$http.getAction(`/rest/category/${this.id}`);
       this.model = res.data;
     }
   }

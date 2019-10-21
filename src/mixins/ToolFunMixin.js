@@ -1,3 +1,4 @@
+import { http } from '@/router/request';
 export const ToolFunMixin = {
   data() {
     return {};
@@ -5,7 +6,7 @@ export const ToolFunMixin = {
   created() {},
   computed: {
     uploadUrl() {
-      return this.$http.defaults.baseURL + '/upload';
+      return http.defaults.baseURL + '/upload';
     }
   },
   methods: {

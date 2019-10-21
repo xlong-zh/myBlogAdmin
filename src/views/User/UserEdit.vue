@@ -20,6 +20,7 @@ export default {
   props: {
     id: {}
   },
+
   data() {
     return {
       model: {}
@@ -28,9 +29,12 @@ export default {
   methods: {
     async save() {
       if (this.id) {
-        const res = await putAction(`/rest/user/${this.id}`, this.model);
+        const res = await this.$http.putAction(
+          `/rest/user/${this.id}`,
+          this.model
+        );
       } else {
-        const res = await postAction(`/rest/user`, this.model);
+        const res = await this.$http.postAction(`/rest/user`, this.model);
       }
       this.$router.push("/user/list");
       this.$message({
@@ -39,12 +43,12 @@ export default {
       });
     },
     async fetch() {
-      // const res = await this.$http.get(`/rest/user/${this.id}`);
-      const res = await getAction(`/rest/user`, this.id);
+      const res = await this.$http.getAction(`/rest/user/${this.id}`);
       this.model = res.data;
     }
   },
   created() {
+    console.log(this.id);
     this.id && this.fetch();
   }
 };

@@ -242,3 +242,25 @@ export function cleanFloatingNum(numa, numb, oper) {
   }
   return obj;
 }
+    //金额千位加逗号,末尾2位小数
+    toThousands(obj) {
+      if (typeof obj !== 'number') {
+        return obj;
+      }
+      let arr = [],
+        counter = 0,
+        num = '',
+        tail = '';
+      tail = String(obj.toFixed(2)).split('.')[1];
+      num = String(obj.toFixed(2))
+        .split('.')[0]
+        .split('');
+      for (let i = num.length - 1; i >= 0; i--) {
+        counter++;
+        arr.unshift(num[i]);
+        if (counter % 3 === 0 && i != 0) {
+          arr.unshift(',');
+        }
+      }
+      return arr.join('') + '.' + tail;
+    },

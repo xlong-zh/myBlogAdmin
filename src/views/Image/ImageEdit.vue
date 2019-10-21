@@ -44,9 +44,12 @@ export default {
     },
     async save() {
       if (this.id) {
-        const res = await this.$http.put(`/rest/image/${this.id}`, this.model);
+        const res = await this.$http.putAction(
+          `/rest/image/${this.id}`,
+          this.model
+        );
       } else {
-        const res = await this.$http.post(`/rest/image`, this.model);
+        const res = await this.$http.postAction(`/rest/image`, this.model);
       }
       this.$router.push(`/image/list`);
       this.$message({
@@ -55,7 +58,7 @@ export default {
       });
     },
     async fetch() {
-      const res = await this.$http.get(`/rest/image/${this.id}`);
+      const res = await this.$http.getAction(`/rest/image/${this.id}`);
       this.model = res.data;
     }
   },

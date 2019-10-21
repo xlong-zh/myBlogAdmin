@@ -57,12 +57,12 @@ export default {
     },
     async save() {
       if (this.id) {
-        const res = await this.$http.put(
+        const res = await this.$http.putAction(
           `/rest/article/${this.id}`,
           this.model
         );
       } else {
-        const res = await this.$http.post(`/rest/article`, this.model);
+        const res = await this.$http.postAction(`/rest/article`, this.model);
       }
       this.$router.push(`/article/list`);
       this.$message({
@@ -71,11 +71,11 @@ export default {
       });
     },
     async fetch() {
-      const res = await this.$http.get(`/rest/article/${this.id}`);
+      const res = await this.$http.getAction(`/rest/article/${this.id}`);
       this.model = res.data;
     },
     async fetchCategory() {
-      const res = await this.$http.get(`/rest/category`);
+      const res = await this.$http.getAction(`/rest/category`);
       this.category = res.data;
     }
   }
