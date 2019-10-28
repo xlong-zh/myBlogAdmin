@@ -242,25 +242,40 @@ export function cleanFloatingNum(numa, numb, oper) {
   }
   return obj;
 }
-    //金额千位加逗号,末尾2位小数
-    toThousands(obj) {
-      if (typeof obj !== 'number') {
-        return obj;
-      }
-      let arr = [],
-        counter = 0,
-        num = '',
-        tail = '';
-      tail = String(obj.toFixed(2)).split('.')[1];
-      num = String(obj.toFixed(2))
-        .split('.')[0]
-        .split('');
-      for (let i = num.length - 1; i >= 0; i--) {
-        counter++;
-        arr.unshift(num[i]);
-        if (counter % 3 === 0 && i != 0) {
-          arr.unshift(',');
-        }
-      }
-      return arr.join('') + '.' + tail;
-    },
+//金额千位加逗号,末尾2位小数
+export function toThousands(obj) {
+  if (typeof obj !== 'number') {
+    return obj;
+  }
+  let arr = [],
+    counter = 0,
+    num = '',
+    tail = '';
+  tail = String(obj.toFixed(2)).split('.')[1];
+  num = String(obj.toFixed(2))
+    .split('.')[0]
+    .split('');
+  for (let i = num.length - 1; i >= 0; i--) {
+    counter++;
+    arr.unshift(num[i]);
+    if (counter % 3 === 0 && i != 0) {
+      arr.unshift(',');
+    }
+  }
+  return arr.join('') + '.' + tail;
+}
+//设置接单时间间隔（当前时间，一个月前时间）
+export function setTimeSpace(setATime, setBTime) {
+  let time1 = new Date();
+  time1.setTime(time1.getTime());
+  let Y1 = time1.getFullYear();
+  let M1 = time1.getMonth() + 1 > 9 ? time1.getMonth() + 1 : '0' + (time1.getMonth() + 1);
+  let D1 = time1.getDate() > 9 ? time1.getDate() : '0' + time1.getDate();
+  setATime = `${Y1}/${M1}/${D1} 23:59:59`; // 当前时间
+  let time2 = new Date();
+  time2.setTime(time2.getTime() - 24 * 60 * 60 * 1000 * 30);
+  let Y2 = time2.getFullYear();
+  let M2 = time2.getMonth() + 1 > 9 ? time2.getMonth() + 1 : '0' + (time2.getMonth() + 1);
+  let D2 = time2.getDate() > 9 ? time2.getDate() : '0' + time2.getDate();
+  setBTime = `${Y2}/${M2}/${D2} 00:00:00`; // 之前一个月
+}
