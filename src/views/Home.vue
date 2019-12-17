@@ -13,7 +13,7 @@
           :collapse="isCollapse"
         >
           <div class="navlogo">
-            <img src="../assets/logo.png" alt />
+            <img src="../assets/logo.jpg" alt />
           </div>
           <el-menu-item index="/article/create">
             <i class="el-icon-edit"></i>
@@ -54,7 +54,7 @@
         <el-header style="margin-top:30px;">
           <div
             style="display:inline-block;font-size:30px;margin-right:15px;padding-right:15px;border-right:1px solid #999"
-            @click="isCollapse=!isCollapse"
+            @click="isCollapse = !isCollapse"
           >
             <i v-show="!isCollapse" class="el-icon-s-fold"></i>
             <i v-show="isCollapse" class="el-icon-s-unfold"></i>

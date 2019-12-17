@@ -734,7 +734,7 @@
 
 "@tinymce/tinymce-vue@^3.0.1":
   version "3.0.1"
-  resolved "https://registry.npm.taobao.org/@tinymce/tinymce-vue/download/@tinymce/tinymce-vue-3.0.1.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40tinymce%2Ftinymce-vue%2Fdownload%2F%40tinymce%2Ftinymce-vue-3.0.1.tgz#c606b5d6b0704a7fc1efdf96ef6080cdc23c88f3"
+  resolved "https://registry.npm.taobao.org/@tinymce/tinymce-vue/download/@tinymce/tinymce-vue-3.0.1.tgz#c606b5d6b0704a7fc1efdf96ef6080cdc23c88f3"
   integrity sha1-xga11rBwSn/B79+W72CAzcI8iPM=
 
 "@types/events@*":
@@ -2646,6 +2646,11 @@ date-now@^0.1.4:
   version "0.1.4"
   resolved "https://registry.npm.taobao.org/date-now/download/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
   integrity sha1-6vQ5/U1ISK105cx9vvIAZyueNFs=
+
+dayjs@^1.8.17:
+  version "1.8.17"
+  resolved "https://registry.npm.taobao.org/dayjs/download/dayjs-1.8.17.tgz#53ec413f2a7b02afbea1846d61bb260fa8567cea"
+  integrity sha1-U+xBPyp7Aq++oYRtYbsmD6hWfOo=
 
 de-indent@^1.0.2:
   version "1.0.2"
