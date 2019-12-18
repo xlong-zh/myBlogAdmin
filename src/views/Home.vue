@@ -82,9 +82,7 @@
                 v-for="(item, index) in editableTabs"
                 :label="item.title"
                 :name="item.name"
-              >
-                {{ item.content }}
-              </el-tab-pane>
+              ></el-tab-pane>
             </el-tabs>
           </div>
           <div style="background:#ffffff;">
@@ -172,61 +170,34 @@ export default {
 }
 
 /*美化弹出Tab样式*/
-.el-tabs{
+.el-tabs {
   margin-top: 4px;
 }
-.el-tabs__nav-wrap::after{
-  background-color:transparent !important;
+.el-tabs__header {
+  margin-bottom: 5px !important;
 }
-/* 修改 ant-tabs 样式 */
-.el-tabs__active-bar,
-.el-tabs__item{
-padding: 0 20px !important;
+.el-tabs__nav-wrap::after {
+  background-color: transparent !important;
 }
-
-.tab-layout-tabs.ant-tabs {
-  border-bottom: 1px solid #ccc;
-  border-left: 1px solid #ccc;
-  background-color: white;
-  
-
-  .ant-tabs-bar {
-    margin: 4px 0 0;
-    border: none;
-  }
+.el-tabs__item {
+  padding: 0 20px !important;
+  text-align: center !important;
 }
-
-.ant-tabs {
-  &.ant-tabs-card .ant-tabs-tab {
-    padding: 0 24px !important;
-    background-color: white !important;
-    margin-right: 10px !important;
-
-    .ant-tabs-close-x {
-      width: 12px !important;
-      height: 12px !important;
+.el-tabs__active-bar {
+  left: -8px !important;
+}
+.el-tabs {
+  .el-tabs__item {
+    .el-icon-close {
       opacity: 0 !important;
-      cursor: pointer !important;
-      font-size: 12px !important;
-      margin: 0 !important;
-      position: absolute;
-      top: 36%;
-      right: 6px;
     }
-
-    &:hover .ant-tabs-close-x {
+    &:hover .el-icon-close {
       opacity: 1 !important;
+      &:hover {
+        background: transparent !important;
+        color: #409eff !important;
+      }
     }
-  }
-}
-
-.ant-tabs.ant-tabs-card > .ant-tabs-bar {
-  .ant-tabs-tab {
-    border: none !important;
-    border-bottom: 1px solid transparent !important;
-  }
-  .ant-tabs-tab-active {
-    border-color: #13c2c2 !important;
   }
 }
 </style>

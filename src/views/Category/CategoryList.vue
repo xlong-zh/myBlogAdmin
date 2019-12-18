@@ -3,15 +3,22 @@
     <h1>类别列表</h1>
     <el-table v-if="items" :data="items">
       <el-table-column prop="_id" label="ID" width="240"></el-table-column>
-      <el-table-column prop="name" label="类别名称" width="150"></el-table-column>
+      <el-table-column
+        prop="name"
+        label="类别名称"
+        width="150"
+      ></el-table-column>
       <el-table-column label="操作" width="100">
         <template slot-scope="scope">
           <el-button
             @click="$router.push(`/category/edit/${scope.row._id}`)"
             type="text"
             size="small"
-          >编辑</el-button>
-          <el-button @click="remove(scope.row)" type="text" size="small">删除</el-button>
+            >编辑</el-button
+          >
+          <el-button @click="remove(scope.row)" type="text" size="small"
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -59,5 +66,4 @@ export default {
   }
 };
 </script>
-<style lang='scss' scoped>
-</style>
+<style lang="scss" scoped></style>

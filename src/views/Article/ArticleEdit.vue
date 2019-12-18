@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1>{{ id ? "编辑" : "新建" }}文章</h1>
     <el-form label-width="120px" @submit.native.prevent="save">
+      <h1>{{ id ? "编辑" : "新建" }}文章</h1>
       <el-form-item label="类别">
         <el-select v-model="model.category" multiple>
           <el-option
@@ -34,7 +34,7 @@
       <el-form-item label="内容">
         <el-input type="textarea" v-model="model.content"></el-input>
         <div>
-          {{msg}}
+          {{ msg }}
           <tinymce-editor
             ref="editor"
             v-model="msg"

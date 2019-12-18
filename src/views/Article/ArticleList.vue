@@ -3,7 +3,9 @@
     <h1>文章列表</h1>
     <el-table :data="model" v-if="model">
       <el-table-column label="类别" width="150">
-        <template slot-scope="scope">{{scope.row.category.map(v => v.name).join('/')}}</template>
+        <template slot-scope="scope">{{
+          scope.row.category.map(v => v.name).join("/")
+        }}</template>
       </el-table-column>
       <el-table-column prop="name" label="名称" width="150"></el-table-column>
       <el-table-column prop="icon" label="图标" width="100">
@@ -12,15 +14,22 @@
         </template>
       </el-table-column>
       <el-table-column prop="title" label="标题" width="180"></el-table-column>
-      <el-table-column prop="content" label="内容" :show-overflow-tooltip="true"></el-table-column>
+      <el-table-column
+        prop="content"
+        label="内容"
+        :show-overflow-tooltip="true"
+      ></el-table-column>
       <el-table-column label="操作" width="100">
         <template slot-scope="scope">
           <el-button
             @click="$router.push(`/article/edit/${scope.row._id}`)"
             type="text"
             size="small"
-          >编辑</el-button>
-          <el-button @click="remove(scope.row)" type="text" size="small">删除</el-button>
+            >编辑</el-button
+          >
+          <el-button @click="remove(scope.row)" type="text" size="small"
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -66,5 +75,4 @@ export default {
   }
 };
 </script>
-<style lang='scss' scoped>
-</style>
+<style lang="scss" scoped></style>
