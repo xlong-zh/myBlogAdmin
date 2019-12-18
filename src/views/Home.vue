@@ -70,8 +70,26 @@
             </el-breadcrumb>
           </div>
         </el-header>
-        <el-main>
-          <router-view :key="$route.path"></router-view>
+        <el-main style="background:#f0f2f5;">
+          <div style="background:#ffffff;">
+            <el-tabs
+              v-model="editableTabsValue"
+              closable
+              @tab-remove="handleTabsEdit"
+            >
+              <el-tab-pane
+                :key="item.name"
+                v-for="(item, index) in editableTabs"
+                :label="item.title"
+                :name="item.name"
+              >
+                {{ item.content }}
+              </el-tab-pane>
+            </el-tabs>
+          </div>
+          <div style="background:#ffffff;">
+            <router-view :key="$route.path"></router-view>
+          </div>
         </el-main>
       </el-container>
     </el-container>
@@ -82,7 +100,21 @@
 export default {
   data() {
     return {
-      isCollapse: false
+      isCollapse: false,
+      editableTabsValue: "2",
+      editableTabs: [
+        {
+          title: "Tab 1",
+          name: "1",
+          content: "Tab 1 content"
+        },
+        {
+          title: "Tab 2",
+          name: "2",
+          content: "Tab 2 content"
+        }
+      ],
+      tabIndex: 2
     };
   },
   methods: {
@@ -91,6 +123,35 @@ export default {
     },
     handleClose(key, keyPath) {
       // console.log(key, keyPath);
+    },
+
+    handleTabsEdit(targetName, action) {
+      if (action === "add") {
+        let newTabName = ++this.tabIndex + "";
+        this.editableTabs.push({
+          title: "New Tab",
+          name: newTabName,
+          content: "New Tab content"
+        });
+        this.editableTabsValue = newTabName;
+      }
+      if (action === "remove") {
+        let tabs = this.editableTabs;
+        let activeName = this.editableTabsValue;
+        if (activeName === targetName) {
+          tabs.forEach((tab, index) => {
+            if (tab.name === targetName) {
+              let nextTab = tabs[index + 1] || tabs[index - 1];
+              if (nextTab) {
+                activeName = nextTab.name;
+              }
+            }
+          });
+        }
+
+        this.editableTabsValue = activeName;
+        this.editableTabs = tabs.filter(tab => tab.name !== targetName);
+      }
     }
   }
 };
@@ -107,6 +168,65 @@ export default {
       width: 100%;
       height: 100%;
     }
+  }
+}
+
+/*美化弹出Tab样式*/
+.el-tabs{
+  margin-top: 4px;
+}
+.el-tabs__nav-wrap::after{
+  background-color:transparent !important;
+}
+/* 修改 ant-tabs 样式 */
+.el-tabs__active-bar,
+.el-tabs__item{
+padding: 0 20px !important;
+}
+
+.tab-layout-tabs.ant-tabs {
+  border-bottom: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  background-color: white;
+  
+
+  .ant-tabs-bar {
+    margin: 4px 0 0;
+    border: none;
+  }
+}
+
+.ant-tabs {
+  &.ant-tabs-card .ant-tabs-tab {
+    padding: 0 24px !important;
+    background-color: white !important;
+    margin-right: 10px !important;
+
+    .ant-tabs-close-x {
+      width: 12px !important;
+      height: 12px !important;
+      opacity: 0 !important;
+      cursor: pointer !important;
+      font-size: 12px !important;
+      margin: 0 !important;
+      position: absolute;
+      top: 36%;
+      right: 6px;
+    }
+
+    &:hover .ant-tabs-close-x {
+      opacity: 1 !important;
+    }
+  }
+}
+
+.ant-tabs.ant-tabs-card > .ant-tabs-bar {
+  .ant-tabs-tab {
+    border: none !important;
+    border-bottom: 1px solid transparent !important;
+  }
+  .ant-tabs-tab-active {
+    border-color: #13c2c2 !important;
   }
 }
 </style>
