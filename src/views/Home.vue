@@ -15,6 +15,10 @@
           <div class="navlogo">
             <img src="../assets/logo.jpg" alt />
           </div>
+          <el-menu-item index="/homePage/homePage">
+            <i class="el-icon-edit"></i>
+            <span slot="title">首页</span>
+          </el-menu-item>
           <el-menu-item index="/article/create">
             <i class="el-icon-edit"></i>
             <span slot="title">创建文章</span>
@@ -61,7 +65,7 @@
           </div>
           <div style="display:inline-block;">
             <el-breadcrumb separator="/">
-              <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+              <el-breadcrumb-item :to="{ path: '/homePage/homePage' }">首页</el-breadcrumb-item>
               <el-breadcrumb-item>
                 <a href="/">活动管理</a>
               </el-breadcrumb-item>
@@ -70,22 +74,23 @@
             </el-breadcrumb>
           </div>
         </el-header>
-        <el-main style="background:#f0f2f5;">
-          <div style="background:#ffffff;">
+        <el-main>
+          <div class="mynav-el-tabs-wrap">
             <el-tabs
-              v-model="editableTabsValue"
+              v-model="activePage"
               closable
-              @tab-remove="handleTabsEdit"
+              @edit="editPage"
+              @tab-click="changePage"
             >
               <el-tab-pane
-                :key="item.name"
-                v-for="(item, index) in editableTabs"
-                :label="item.title"
-                :name="item.name"
+                :key="page.name"
+                v-for="page in pageList"
+                :label="page.title"
+                :name="page.name"
               ></el-tab-pane>
             </el-tabs>
           </div>
-          <div style="background:#ffffff;">
+          <div style="background:#ffffff;margin:12px;">
             <router-view :key="$route.path"></router-view>
           </div>
         </el-main>
@@ -96,20 +101,34 @@
 
 <script>
 export default {
+  watch:{
+    //    $route(newRoute) {
+    //   this.activePage = newRoute.fullPath;
+    //   if (!this.multipage) {
+    //     this.linkList = [newRoute.fullPath];
+    //     this.pageList = [Object.assign({}, newRoute)];
+    //   } else if (this.linkList.indexOf(newRoute.fullPath) < 0) {
+    //     this.linkList.push(newRoute.fullPath);
+    //     this.pageList.push(Object.assign({}, newRoute));
+    //   } else if (this.linkList.indexOf(newRoute.fullPath) >= 0) {
+    //     let oldIndex = this.linkList.indexOf(newRoute.fullPath);
+    //     let oldPositionRoute = this.pageList[oldIndex];
+    //     this.pageList.splice(oldIndex, 1, Object.assign({}, newRoute, { meta: oldPositionRoute.meta }));
+    //   }
+    // },
+  },
   data() {
     return {
       isCollapse: false,
-      editableTabsValue: "2",
-      editableTabs: [
+      activePage: "2",
+      pageList: [
         {
           title: "Tab 1",
-          name: "1",
-          content: "Tab 1 content"
+          name: "1"
         },
         {
           title: "Tab 2",
-          name: "2",
-          content: "Tab 2 content"
+          name: "2"
         }
       ],
       tabIndex: 2
@@ -122,8 +141,13 @@ export default {
     handleClose(key, keyPath) {
       // console.log(key, keyPath);
     },
-
-    handleTabsEdit(targetName, action) {
+    changePage(key) {
+      this.activePage = key;
+      console.log("标签切换了+++++++++++++++++++++++++");
+      //路由是否缓存
+      // this.$store.commit('SET_RELOAD', true);
+    },
+    editPage(targetName, action) {
       if (action === "add") {
         let newTabName = ++this.tabIndex + "";
         this.editableTabs.push({
@@ -131,11 +155,11 @@ export default {
           name: newTabName,
           content: "New Tab content"
         });
-        this.editableTabsValue = newTabName;
+        this.activePage = newTabName;
       }
       if (action === "remove") {
         let tabs = this.editableTabs;
-        let activeName = this.editableTabsValue;
+        let activeName = this.activePage;
         if (activeName === targetName) {
           tabs.forEach((tab, index) => {
             if (tab.name === targetName) {
@@ -147,14 +171,14 @@ export default {
           });
         }
 
-        this.editableTabsValue = activeName;
+        this.activePage = activeName;
         this.editableTabs = tabs.filter(tab => tab.name !== targetName);
       }
     }
   }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;
   min-height: 400px;
@@ -167,35 +191,43 @@ export default {
       height: 100%;
     }
   }
+  ::v-deep .el-main {
+    padding: 0 !important;
+    background: #f0f2f5;
+  }
 }
 
 /*美化弹出Tab样式*/
-.el-tabs {
-  margin-top: 4px;
-}
-.el-tabs__header {
-  margin-bottom: 5px !important;
-}
-.el-tabs__nav-wrap::after {
-  background-color: transparent !important;
-}
-.el-tabs__item {
-  padding: 0 20px !important;
-  text-align: center !important;
-}
-.el-tabs__active-bar {
-  left: -8px !important;
-}
-.el-tabs {
-  .el-tabs__item {
-    .el-icon-close {
-      opacity: 0 !important;
-    }
-    &:hover .el-icon-close {
-      opacity: 1 !important;
-      &:hover {
-        background: transparent !important;
-        color: #409eff !important;
+.mynav-el-tabs-wrap {
+  background: #ffffff;
+  ::v-deep .el-tabs__header {
+    margin-bottom: 5px !important;
+  }
+  ::v-deep .el-tabs__nav-wrap::after {
+    background-color: transparent !important;
+  }
+  ::v-deep .el-tabs__item {
+    padding: 0 20px !important;
+    // text-align: center !important;
+  }
+  ::v-deep .el-tabs__active-bar {
+    left: -8px !important;
+    height: 1px !important;
+  }
+  ::v-deep .el-tabs {
+    margin-top: 2px;
+    border-left: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    .el-tabs__item {
+      .el-icon-close {
+        opacity: 0 !important;
+      }
+      &:hover .el-icon-close {
+        opacity: 1 !important;
+        &:hover {
+          background: transparent !important;
+          color: #409eff !important;
+        }
       }
     }
   }

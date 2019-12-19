@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Home from '@views/Home.vue';
 import Login from '@views/Login.vue';
+import HomePage from '@views/HomePage/HomePage.vue';
 import CategoryEdit from '@views/Category/CategoryEdit.vue';
 import CategoryList from '@views/Category/CategoryList.vue';
 import ArticleEdit from '@views/Article/ArticleEdit.vue';
@@ -30,6 +31,11 @@ const router = new Router({
       name: 'home',
       component: Home,
       children: [
+        {
+          path: '/homePage/homePage',
+          name: 'homePage',
+          component: HomePage
+        },
         {
           path: '/category/create',
           name: 'category-c',
