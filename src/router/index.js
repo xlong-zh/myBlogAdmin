@@ -13,7 +13,10 @@ import ImageEdit from '@views/Image/ImageEdit.vue';
 import ImageList from '@views/Image/ImageList.vue';
 
 Vue.use(Router);
-
+const originalPush = Router.prototype.push
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 const router = new Router({
   // mode: 'history',
   // base: process.env.BASE_URL,
@@ -33,74 +36,126 @@ const router = new Router({
       children: [
         {
           path: '/homePage/homePage',
-          name: 'homePage',
-          component: HomePage
+          name: 'homePage-homePage',
+          component: HomePage,
+          meta: {
+            icon: "dashboard",
+            title: "首页"
+          }
         },
         {
           path: '/category/create',
-          name: 'category-c',
-          component: CategoryEdit
+          name: 'category-create',
+          component: CategoryEdit,
+          meta: {
+            icon: "dashboard",
+            title: "新建分类"
+          }
         },
         {
           path: '/category/edit/:id',
-          name: 'category-e',
+          name: 'category-edit',
           component: CategoryEdit,
-          props: true
+          props: true,
+          meta: {
+            icon: "dashboard",
+            title: "编辑分类"
+          }
         },
         {
           path: '/category/list',
-          name: 'category-l',
-          component: CategoryList
+          name: 'category-list',
+          component: CategoryList,
+          meta: {
+            icon: "dashboard",
+            title: "分类列表"
+          }
         },
 
         {
           path: '/article/create',
-          name: 'article-c',
-          component: ArticleEdit
+          name: 'article-create',
+          component: ArticleEdit,
+          meta: {
+            icon: "dashboard",
+            title: "新建文章"
+          }
         },
         {
           path: '/article/edit/:id',
-          name: 'article-e',
+          name: 'article-edit',
           component: ArticleEdit,
-          props: true
+          props: true,
+          meta: {
+            icon: "dashboard",
+            title: "编辑文章"
+          }
         },
         {
           path: '/article/list',
-          name: 'article-l',
-          component: ArticleList
+          name: 'article-list',
+          component: ArticleList,
+          meta: {
+            icon: "dashboard",
+            title: "文章列表"
+          }
         },
         {
           path: '/user/create',
-          name: 'user-c',
-          component: UserEdit
+          name: 'user-create',
+          component: UserEdit,
+          meta: {
+            icon: "dashboard",
+            title: "新建用户"
+          }
         },
         {
           path: '/user/edit/:id',
-          name: 'user-e',
+          name: 'user-edit',
           component: UserEdit,
-          props: true
+          props: true,
+          meta: {
+            icon: "dashboard",
+            title: "编辑用户"
+          }
         },
         {
           path: '/user/list',
-          name: 'user-d',
-          component: UserList
+          name: 'user-list',
+          component: UserList,
+          meta: {
+            icon: "dashboard",
+            title: "用户列表"
+          }
         },
 
         {
           path: '/image/create',
-          name: 'image-c',
-          component: ImageEdit
+          name: 'image-create',
+          component: ImageEdit,
+          meta: {
+            icon: "dashboard",
+            title: "新建图片"
+          }
         },
         {
           path: '/image/edit/:id',
-          name: 'image-e',
+          name: 'image-edit',
           component: ImageEdit,
-          props: true
+          props: true,
+          meta: {
+            icon: "dashboard",
+            title: "编辑图片"
+          }
         },
         {
           path: '/image/list',
-          name: 'image-d',
-          component: ImageList
+          name: 'image-list',
+          component: ImageList,
+          meta: {
+            icon: "dashboard",
+            title: "图片列表"
+          }
         }
       ]
     }
