@@ -1,14 +1,13 @@
 <template>
-  <el-menu
-    :style="style"
-    class="contextmenu"
-    v-show="visible"
-    @click="handleClick"
-    :selectedKeys="selectedKeys"
-  >
-    <el-menu-item :key="item.key" v-for="item in itemList">
-      <!-- <a-icon role="menuitemicon" v-if="item.icon" :type="item.icon" /> -->
-      {{ item.text }}
+  <el-menu :style="style" class="contextmenu" v-show="visible">
+    <el-menu-item
+      @click.native="handleClick(item.key, $event)"
+      :index="item.key"
+      :key="item.key"
+      v-for="item in itemList"
+    >
+      <i v-if="item.icon" :class="item.icon"></i>
+      <span data-role="menuitemicon" slot="title"> {{ item.text }}</span>
     </el-menu-item>
   </el-menu>
 </template>
@@ -32,8 +31,7 @@ export default {
     return {
       left: 0,
       top: 0,
-      target: null,
-      selectedKeys: []
+      target: null
     };
   },
   computed: {
@@ -50,9 +48,7 @@ export default {
   },
   methods: {
     closeMenu(e) {
-      if (
-        ["menuitemicon", "menuitem"].indexOf(e.target.getAttribute("role")) < 0
-      ) {
+      if (["menuitem", "menuitemicon"].indexOf(e.target.dataset.role) < 0) {
         this.$emit("update:visible", false);
       }
     },
@@ -61,7 +57,9 @@ export default {
       this.top = e.clientY;
       this.target = e.target;
     },
-    handleClick({ key }) {
+    handleClick(key, e) {
+      console.log("子组件触发了");
+      console.log(e);
       this.$emit("select", key, this.target);
       this.$emit("update:visible", false);
     }
@@ -72,9 +70,11 @@ export default {
 <style lang="scss" scoped>
 .contextmenu {
   position: fixed;
-  z-index: 1;
+  z-index: 999;
   border: 1px solid #9e9e9e;
   border-radius: 4px;
   box-shadow: 2px 2px 10px #aaaaaa !important;
+  width: auto !important;
+  background: #ffffff;
 }
 </style>

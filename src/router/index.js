@@ -1,42 +1,42 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import Home from '@views/Home.vue';
-import Login from '@views/Login.vue';
-import HomePage from '@views/HomePage/HomePage.vue';
-import CategoryEdit from '@views/Category/CategoryEdit.vue';
-import CategoryList from '@views/Category/CategoryList.vue';
-import ArticleEdit from '@views/Article/ArticleEdit.vue';
-import ArticleList from '@views/Article/ArticleList.vue';
-import UserEdit from '@views/User/UserEdit.vue';
-import UserList from '@views/User/UserList.vue';
-import ImageEdit from '@views/Image/ImageEdit.vue';
-import ImageList from '@views/Image/ImageList.vue';
+import Vue from "vue";
+import Router from "vue-router";
+import Home from "@views/Home.vue";
+import Login from "@views/Login.vue";
+import HomePage from "@views/HomePage/HomePage.vue";
+import CategoryEdit from "@views/Category/CategoryEdit.vue";
+import CategoryList from "@views/Category/CategoryList.vue";
+import ArticleEdit from "@views/Article/ArticleEdit.vue";
+import ArticleList from "@views/Article/ArticleList.vue";
+import UserEdit from "@views/User/UserEdit.vue";
+import UserList from "@views/User/UserList.vue";
+import ImageEdit from "@views/Image/ImageEdit.vue";
+import ImageList from "@views/Image/ImageList.vue";
 
 Vue.use(Router);
-const originalPush = Router.prototype.push
+const originalPush = Router.prototype.push;
 Router.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch(err => err)
-}
+  return originalPush.call(this, location).catch(err => err);
+};
 const router = new Router({
   // mode: 'history',
   // base: process.env.BASE_URL,
   routes: [
     {
-      path: '/login',
-      name: 'login',
+      path: "/login",
+      name: "login",
       component: Login,
       meta: {
         isPublic: true
       }
     },
     {
-      path: '/',
-      name: 'home',
+      path: "/",
+      name: "home",
       component: Home,
       children: [
         {
-          path: '/homePage/homePage',
-          name: 'homePage-homePage',
+          path: "/homePage/homePage",
+          name: "homePage-homePage",
           component: HomePage,
           meta: {
             icon: "dashboard",
@@ -44,8 +44,8 @@ const router = new Router({
           }
         },
         {
-          path: '/category/create',
-          name: 'category-create',
+          path: "/category/create",
+          name: "category-create",
           component: CategoryEdit,
           meta: {
             icon: "dashboard",
@@ -53,8 +53,8 @@ const router = new Router({
           }
         },
         {
-          path: '/category/edit/:id',
-          name: 'category-edit',
+          path: "/category/edit/:id",
+          name: "category-edit",
           component: CategoryEdit,
           props: true,
           meta: {
@@ -63,8 +63,8 @@ const router = new Router({
           }
         },
         {
-          path: '/category/list',
-          name: 'category-list',
+          path: "/category/list",
+          name: "category-list",
           component: CategoryList,
           meta: {
             icon: "dashboard",
@@ -73,8 +73,8 @@ const router = new Router({
         },
 
         {
-          path: '/article/create',
-          name: 'article-create',
+          path: "/article/create",
+          name: "article-create",
           component: ArticleEdit,
           meta: {
             icon: "dashboard",
@@ -82,8 +82,8 @@ const router = new Router({
           }
         },
         {
-          path: '/article/edit/:id',
-          name: 'article-edit',
+          path: "/article/edit/:id",
+          name: "article-edit",
           component: ArticleEdit,
           props: true,
           meta: {
@@ -92,8 +92,8 @@ const router = new Router({
           }
         },
         {
-          path: '/article/list',
-          name: 'article-list',
+          path: "/article/list",
+          name: "article-list",
           component: ArticleList,
           meta: {
             icon: "dashboard",
@@ -101,8 +101,8 @@ const router = new Router({
           }
         },
         {
-          path: '/user/create',
-          name: 'user-create',
+          path: "/user/create",
+          name: "user-create",
           component: UserEdit,
           meta: {
             icon: "dashboard",
@@ -110,8 +110,8 @@ const router = new Router({
           }
         },
         {
-          path: '/user/edit/:id',
-          name: 'user-edit',
+          path: "/user/edit/:id",
+          name: "user-edit",
           component: UserEdit,
           props: true,
           meta: {
@@ -120,8 +120,8 @@ const router = new Router({
           }
         },
         {
-          path: '/user/list',
-          name: 'user-list',
+          path: "/user/list",
+          name: "user-list",
           component: UserList,
           meta: {
             icon: "dashboard",
@@ -130,8 +130,8 @@ const router = new Router({
         },
 
         {
-          path: '/image/create',
-          name: 'image-create',
+          path: "/image/create",
+          name: "image-create",
           component: ImageEdit,
           meta: {
             icon: "dashboard",
@@ -139,8 +139,8 @@ const router = new Router({
           }
         },
         {
-          path: '/image/edit/:id',
-          name: 'image-edit',
+          path: "/image/edit/:id",
+          name: "image-edit",
           component: ImageEdit,
           props: true,
           meta: {
@@ -149,8 +149,8 @@ const router = new Router({
           }
         },
         {
-          path: '/image/list',
-          name: 'image-list',
+          path: "/image/list",
+          name: "image-list",
           component: ImageList,
           meta: {
             icon: "dashboard",
@@ -170,11 +170,19 @@ const router = new Router({
   ]
 });
 router.beforeEach((to, from, next) => {
-  if (!to.meta.isPublic && !localStorage.token) {
-    console.log('123');
-    return next('/login');
+  if (localStorage.token) {
+    if (to.path === "/") {
+      next({ path: "/homePage/homePage" });
+    } else {
+      next();
+    }
+  } else {
+    if (!to.meta.isPublic && !localStorage.token) {
+      console.log("123");
+      return next("/login");
+    }
+    next();
   }
-  next();
 });
 
 export default router;
