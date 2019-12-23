@@ -16,7 +16,7 @@
             <img src="../assets/logo.jpg" alt />
           </div>
           <el-menu-item index="/homePage/homePage">
-            <i class="el-icon-edit"></i>
+            <i class="el-icon-s-home"></i>
             <span slot="title">首页</span>
           </el-menu-item>
           <el-menu-item index="/article/create">
@@ -37,7 +37,7 @@
           </el-submenu>
           <el-submenu index="4">
             <template slot="title">
-              <i class="el-icon-folder-opened"></i>
+              <i class="el-icon-document-copy"></i>
               <span>类别管理</span>
             </template>
             <el-menu-item index="/category/create">新建类别</el-menu-item>
@@ -55,26 +55,15 @@
         </el-menu>
       </el-aside>
       <el-container>
-        <el-header style="margin-top:30px;">
+        <el-header style="display:flex;align-items: center;margin-top:30px;">
           <div
-            style="display:inline-block;font-size:30px;margin-right:15px;padding-right:15px;border-right:1px solid #999"
+            style="font-size:30px;margin-right:15px;padding-right:15px;border-right:1px solid #999"
             @click="isCollapse = !isCollapse"
           >
             <i v-show="!isCollapse" class="el-icon-s-fold"></i>
             <i v-show="isCollapse" class="el-icon-s-unfold"></i>
           </div>
-          <div style="display:inline-block;">
-            <el-breadcrumb separator="/">
-              <el-breadcrumb-item :to="{ path: '/homePage/homePage' }"
-                >首页</el-breadcrumb-item
-              >
-              <el-breadcrumb-item>
-                <a href="/">活动管理</a>
-              </el-breadcrumb-item>
-              <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-              <el-breadcrumb-item>活动详情</el-breadcrumb-item>
-            </el-breadcrumb>
-          </div>
+          <Breadcrumb></Breadcrumb>
         </el-header>
         <el-main>
           <TopTags-nav></TopTags-nav>
@@ -89,9 +78,11 @@
 
 <script>
 import TopTagsNav from "@comp/menu/TopTagsNav";
+import Breadcrumb from "@comp/Breadcrumb/Breadcrumb";
 export default {
   components: {
-    TopTagsNav
+    TopTagsNav,
+    Breadcrumb
   },
   data() {
     return {

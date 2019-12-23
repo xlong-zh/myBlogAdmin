@@ -27,6 +27,10 @@
 
 <script>
 export default {
+    created() {
+    this.fetch();
+    console.log(this.$route.matched,'this.$route.matched')
+  },
   data() {
     return {
       items: []
@@ -61,9 +65,7 @@ export default {
         });
     }
   },
-  created() {
-    this.fetch();
-  }
+
 };
 </script>
 <style lang="scss" scoped></style>

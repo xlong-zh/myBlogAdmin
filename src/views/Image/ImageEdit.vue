@@ -1,8 +1,15 @@
 <template>
   <div>
-    <h1>{{id?'编辑':'增加'}}图片</h1>
-    <el-form label-width="120px" @submit.native.prevent="save">
-      <el-form-item label="名称">
+    <h1>{{ id ? "编辑" : "增加" }}图片</h1>
+    <!-- <el-form label-width="120px" @submit.native.prevent="save"> -->
+    <el-form
+      :model="model"
+      :rules="rules"
+      ref="ruleForm"
+      label-width="100px"
+      class="demo-ruleForm"
+    >
+      <el-form-item label="名称" prop="name">
         <el-input v-model="model.name"></el-input>
       </el-form-item>
       <el-form-item label="图标">
@@ -17,24 +24,36 @@
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-form-item>
-      <el-form-item label="备注">
+      <el-form-item label="备注" prop="remark">
         <el-input v-model="model.remark"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" native-type="submit">保存</el-button>
+        <!-- <el-button type="primary" native-type="submit">保存</el-button> -->
+        <el-button type="primary" @click="submitForm('ruleForm')"
+          >保存</el-button
+        >
+        <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
+import { async } from "q";
 export default {
   props: {
     id: {}
   },
   data() {
     return {
-      model: {}
+      model: {},
+      rules: {
+        name: [
+          { required: true, message: "请输入名称", trigger: "blur" },
+          { min: 1, max: 8, message: "长度在 1 到 8 个字符", trigger: "blur" }
+        ],
+        remark: [{ required: true, message: "请输入备注", trigger: "blur" }]
+      }
     };
   },
   methods: {
@@ -42,20 +61,31 @@ export default {
       console.log(res);
       this.$set(this.model, "img", res.url);
     },
-    async save() {
-      if (this.id) {
-        const res = await this.$http.putAction(
-          `/rest/image/${this.id}`,
-          this.model
-        );
-      } else {
-        const res = await this.$http.postAction(`/rest/image`, this.model);
-      }
-      this.$router.push(`/image/list`);
-      this.$message({
-        message: "保存成功",
-        type: "success"
+    async submitForm(formName) {
+      const that = this;
+      this.$refs[formName].validate(async valid => {
+        if (valid) {
+          if (that.id) {
+            const res = await that.$http.putAction(
+              `/rest/image/${that.id}`,
+              that.model
+            );
+          } else {
+            const res = await that.$http.postAction(`/rest/image`, that.model);
+          }
+          that.$router.push(`/image/list`);
+          that.$message({
+            message: "保存成功",
+            type: "success"
+          });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
       });
+    },
+    async resetForm(formName) {
+      this.$refs[formName].resetFields();
     },
     async fetch() {
       const res = await this.$http.getAction(`/rest/image/${this.id}`);
@@ -67,5 +97,4 @@ export default {
   }
 };
 </script>
-<style lang='scss' scoped>
-</style>
+<style lang="scss" scoped></style>
