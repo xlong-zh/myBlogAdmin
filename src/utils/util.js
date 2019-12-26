@@ -218,7 +218,7 @@ export function randomUUID() {
  * @returns {*}
  */
 export function underLine2CamelCase(string) {
-  return string.replace(/_([a-z])/g, function(all, letter) {
+  return string.replace(/_([a-z])/g, function (all, letter) {
     return letter.toUpperCase();
   });
 }
@@ -279,3 +279,33 @@ export function setTimeSpace(setATime, setBTime) {
   let D2 = time2.getDate() > 9 ? time2.getDate() : '0' + time2.getDate();
   setBTime = `${Y2}/${M2}/${D2} 00:00:00`; // 之前一个月
 }
+/* 导出ant-vue */
+handleExportXls(fileName) {
+  if (!fileName || typeof fileName != 'string') {
+    fileName = '导出文件';
+  }
+  // let param = { ...this.queryParam };
+  // if (this.selectedRowKeys && this.selectedRowKeys.length > 0) {
+  //   param['selections'] = this.selectedRowKeys.join(',');
+  // }
+  // console.log('导出参数', param);
+  downFile('url', { param }).then(data => {
+    if (!data) {
+      this.$message.warning('文件下载失败');
+      return;
+    }
+    if (typeof window.navigator.msSaveBlob !== 'undefined') {
+      window.navigator.msSaveBlob(new Blob([data]), fileName + '.xls');
+    } else {
+      let url = window.URL.createObjectURL(new Blob([data]));
+      let link = document.createElement('a');
+      link.style.display = 'none';
+      link.href = url;
+      link.setAttribute('download', fileName + '.xls');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link); //下载完成移除元素
+      window.URL.revokeObjectURL(url); //释放掉blob对象
+    }
+  });
+},

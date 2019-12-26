@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -24,21 +25,26 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["Login", "Logout"]),
     async login() {
-      const res = await this.$http.postAction("/login", this.model);
-      // sessionStorage.token = res.data.token;
-      localStorage.token = res.data.token;
-      this.$router.push("/");
-      this.$message({
-        type: "success",
-        message: "登录成功"
-      });
-      // console.log(res.data);
+      this.Login(this.model)
+        .then(res => {
+          this.$message.success(res.message || "登录成功");
+          this.$router.push({ path: "/homePage/homePage" });
+        })
+        .catch(e => {
+          this.$message.success(res.message || "登录失败");
+        });
+      // const res = await this.$http.postAction("/login", this.model);
+      // // sessionStorage.token = res.data.token;
+      // console.log(res);
+      // localStorage.token = res.data.result.token;
+      // // console.log(res.data);
     }
   }
 };
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .login-card {
   width: 25rem;
   margin: 5rem auto;
