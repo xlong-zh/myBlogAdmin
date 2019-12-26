@@ -54,21 +54,23 @@ const user = {
     // 登出
     Logout({ commit, state }) {
       return new Promise(resolve => {
-        let logoutToken = state.token;
+        // let logoutToken = state.token;
         commit("SET_TOKEN", "");
+        commit("SET_USERNAME", "");
         commit("SET_PERMISSIONLIST", []);
         localStorage.removeItem("ACCESS_TOKEN");
-        logout(logoutToken)
-          .then(() => {
-            resolve();
-          })
-          .catch(() => {
-            resolve();
-          });
+        resolve();
+        // logout(logoutToken)
+        //   .then(() => {
+        //     resolve();
+        //   })
+        //   .catch(() => {
+        //     resolve();
+        //   });
       });
     },
     // 获取用户信息路由和权限列表
-    GetPermissionList({ commit },params) {
+    GetPermissionList({ commit }, params) {
       return new Promise((resolve, reject) => {
         getInfo(params)
           .then(res => {

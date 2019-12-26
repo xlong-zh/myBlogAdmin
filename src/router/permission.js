@@ -1,22 +1,26 @@
 import Vue from "vue";
 import router from "./index.js";
-import store from "./store";
+import store from "@src/store";
 
-const whiteList = ["/user/login", "/user/register", "/user/register-result"]; // no redirect whitelist
+const whiteList = ["/login"]; // no redirect whitelist
 router.beforeEach((to, from, next) => {
   if (localStorage.getItem("ACCESS_TOKEN")) {
+    if (to.path === "/") {
+      next({ path: "/login" });
+    }
     if (to.path === "/login") {
       next({ path: "/homePage/homePage" });
     } else {
-      console.log(store.getters.permissionList, "store.getters.permissionList");
       if (store.getters.permissionList.length === 0) {
         store
-          .dispatch("GetPermissionList", localStorage.getItem("SET_USERNAME"))
+          .dispatch("GetPermissionList", {
+            username: localStorage.getItem("SET_USERNAME")
+          })
           .then(res => {
             const permissionList = res.data.result.permissionList;
             store.dispatch("GenerateRoutes", { permissionList }).then(res => {
-              router.addRoutes(store.getters.addRoutes);
-              console.log(store.getters.addRoutes, "store.getters.addRoutes");
+              // console.log(store.getters.addRouters, "store.getters.addRouters");
+              router.addRoutes(store.getters.addRouters);
               const redirect = decodeURIComponent(
                 from.query.redirect || to.path
               );
@@ -29,11 +33,11 @@ router.beforeEach((to, from, next) => {
             });
           })
           .catch(e => {
-            // store.dispatch("Logout").then(() => {
-            //   next({ path: "/login", query: { redirect: to.fullPath } });
-            // });
             console.log("登录失败");
-            next({ path: "/login", query: { redirect: to.fullPath } });
+            store.dispatch("Logout").then(() => {
+              next({ path: "/login", query: { redirect: to.fullPath } });
+            });
+            // next({ path: "/login", query: { redirect: to.fullPath } });
           });
       } else {
         next();

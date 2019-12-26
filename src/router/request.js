@@ -1,16 +1,17 @@
-import axios from 'axios';
-import Vue from 'vue';
-import router from './index.js';
+import axios from "axios";
+import Vue from "vue";
+import router from "./index.js";
 const http = axios.create({
-  baseURL: 'http://localhost:4000/admin/api'
+  baseURL: "http://localhost:4000/admin/api"
 });
 //请求拦截
 http.interceptors.request.use(
   config => {
-    if (localStorage.token) {
-      config.headers.Authorization = 'Bearer ' + localStorage.token;
+    if (localStorage.getItem("ACCESS_TOKEN")) {
+      config.headers.Authorization =
+        "Bearer " + localStorage.getItem("ACCESS_TOKEN");
     }
-    if (config.method === 'get') {
+    if (config.method === "get") {
       config.params = {
         _t: new Date().getTime(),
         ...config.params
@@ -30,11 +31,11 @@ http.interceptors.response.use(
   err => {
     if (err.response.data.message) {
       Vue.prototype.$message({
-        type: 'error',
+        type: "error",
         message: err.response.data.message
       });
       if (err.response.status === 401) {
-        router.push('/login');
+        router.push("/login");
       }
     }
     return Promise.reject(err);

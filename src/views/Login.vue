@@ -3,10 +3,17 @@
     <el-card header="请先登录" class="login-card">
       <el-form @submit.native.prevent="login">
         <el-form-item label="用户名">
-          <el-input v-model="model.username"></el-input>
+          <el-input
+            placeholder="访客账户：visitor"
+            v-model="model.username"
+          ></el-input>
         </el-form-item>
         <el-form-item label="密码">
-          <el-input type="password" v-model="model.password"></el-input>
+          <el-input
+            placeholder="访客密码：123456"
+            type="password"
+            v-model="model.password"
+          ></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" native-type="submit">登录</el-button>
@@ -25,7 +32,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["Login", "Logout"]),
+    ...mapActions(["Login"]),
     async login() {
       this.Login(this.model)
         .then(res => {
