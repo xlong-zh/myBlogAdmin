@@ -5,16 +5,13 @@ import store from "@src/store";
 const whiteList = ["/login"]; // no redirect whitelist
 router.beforeEach((to, from, next) => {
   if (localStorage.getItem("ACCESS_TOKEN")) {
-    if (to.path === "/") {
-      next({ path: "/login" });
-    }
     if (to.path === "/login") {
       next({ path: "/homePage/homePage" });
     } else {
       if (store.getters.permissionList.length === 0) {
         store
           .dispatch("GetPermissionList", {
-            username: localStorage.getItem("SET_USERNAME")
+            username: sessionStorage.getItem("SET_USERNAME")
           })
           .then(res => {
             const permissionList = res.data.result.permissionList;
@@ -24,6 +21,8 @@ router.beforeEach((to, from, next) => {
               const redirect = decodeURIComponent(
                 from.query.redirect || to.path
               );
+              console.log(from, "from");
+              console.log(redirect, "redirect");
               if (to.path === redirect) {
                 next({ ...to, replace: true });
               } else {
@@ -33,9 +32,8 @@ router.beforeEach((to, from, next) => {
             });
           })
           .catch(e => {
-            console.log("登录失败");
             store.dispatch("Logout").then(() => {
-              next({ path: "/login", query: { redirect: to.fullPath } });
+              next({ path: "/login" });
             });
             // next({ path: "/login", query: { redirect: to.fullPath } });
           });
@@ -48,7 +46,7 @@ router.beforeEach((to, from, next) => {
       // 白名单路由，直接进入
       next();
     } else {
-      next({ path: "/login", query: { redirect: to.fullPath } });
+      next({ path: "/login" });
     }
   }
 });

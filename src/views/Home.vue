@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <el-container>
-      <el-aside style="width:auto;margin-right:10px;">
+      <el-aside style="height:100vh;width:auto;margin-right:10px;">
         <el-menu
           router
           style="border:none;"
@@ -15,7 +15,7 @@
           <div class="navlogo">
             <img src="../assets/logo.jpg" alt />
           </div>
-          <div v-for="item in submenuList" :key="item.path">
+          <template v-for="item in submenuList">
             <el-menu-item
               v-if="!item.children"
               :key="item.path"
@@ -27,7 +27,7 @@
             <el-submenu v-else :key="item.path" :index="item.path">
               <template slot="title">
                 <i :class="item.meta.icon"></i>
-                <span>{{ item.meta.title }}</span>
+                <span slot="title">{{ item.meta.title }}</span>
               </template>
               <el-menu-item
                 v-for="itemcld in item.children"
@@ -36,7 +36,7 @@
                 >{{ itemcld.meta.title }}</el-menu-item
               >
             </el-submenu>
-          </div>
+          </template>
         </el-menu>
       </el-aside>
       <el-container>
@@ -50,6 +50,11 @@
           </div>
           <Breadcrumb style="flex:1;"></Breadcrumb>
           <div>
+            <span
+              v-if="userpml"
+              style=" font-size: 16px;font-weight: bold;padding-right: 30px;"
+              >朋友你好!</span
+            >
             <el-button type="info" @click="toLogout">登出</el-button>
           </div>
         </el-header>
@@ -96,14 +101,34 @@ export default {
   computed: {
     submenuList() {
       return getSubmenuList(this.$store.getters.addRouters[0].children);
+    },
+    userpml() {
+      const userpml = this.$store.getters.permissionList;
+      if (userpml && userpml.length && userpml.includes("visitor")) {
+        return true;
+      }
+      return false;
     }
   },
   methods: {
     ...mapActions(["Logout"]),
     toLogout() {
-      this.Logout().then(() => {
-        this.$router.push({ path: "/login" });
-      });
+      this.$confirm("确定退出", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.Logout().then(() => {
+            // this.$router.push({ path: "/login" });
+            // window.location.href = "/";
+            window.location.reload();
+          });
+          this.$message.success("退出成功");
+        })
+        .catch(() => {
+          this.$message.info("已取消操作");
+        });
     },
     handleOpen(key, keyPath) {
       // console.log(key, keyPath);

@@ -35,6 +35,7 @@ export const asyncRouterMap = [
     path: "/",
     name: "home",
     component: Home,
+    // redirect: "/homePage/homePage",
     children: [
       {
         path: "/homePage/homePage",
@@ -82,7 +83,8 @@ export const asyncRouterMap = [
         component: Layout,
         meta: {
           icon: "el-icon-document-copy",
-          title: "类别管理"
+          title: "类别管理",
+          breadRow:true
         },
         children: [
           {
@@ -123,7 +125,8 @@ export const asyncRouterMap = [
         component: Layout,
         meta: {
           icon: "el-icon-folder-opened",
-          title: "图片管理"
+          title: "图片管理",
+          breadRow:true
         },
         children: [
           {
@@ -164,7 +167,8 @@ export const asyncRouterMap = [
         meta: {
           icon: "el-icon-setting",
           title: "用户管理",
-          role: ["admin", "super_admin"]
+          role: ["admin", "super_admin"],
+          breadRow:true
         },
         children: [
           {

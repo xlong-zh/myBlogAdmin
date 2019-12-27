@@ -38,7 +38,7 @@ const user = {
               const result = res.data.result;
               // const userInfo = result.userInfo;
               localStorage.setItem("ACCESS_TOKEN", result.token);
-              localStorage.setItem("SET_USERNAME", result.username);
+              sessionStorage.setItem("SET_USERNAME", result.username);
               commit("SET_TOKEN", result.token);
               commit("SET_USERNAME", result.username);
               resolve(res);
@@ -59,6 +59,8 @@ const user = {
         commit("SET_USERNAME", "");
         commit("SET_PERMISSIONLIST", []);
         localStorage.removeItem("ACCESS_TOKEN");
+        sessionStorage.removeItem("SET_USERNAME");
+        sessionStorage.removeItem("USER_AUTH");
         resolve();
         // logout(logoutToken)
         //   .then(() => {

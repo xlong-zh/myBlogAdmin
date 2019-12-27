@@ -4,7 +4,7 @@
       <el-breadcrumb-item
         v-for="(item, index) in breadList"
         :key="index"
-        :to="{ path: item.path }"
+        :to="item.meta && !item.meta.breadRow ? { path: item.path } : false"
         >{{ item.meta.title }}</el-breadcrumb-item
       >
     </el-breadcrumb>
@@ -31,6 +31,7 @@ export default {
     },
     getBreadcrumb() {
       let matched = this.$route.matched;
+      console.log(matched, "matched");
       if (this.isHome(matched[0])) {
         matched[0].path = "/homePage/homePage";
         matched[0].meta.title = "首页";
