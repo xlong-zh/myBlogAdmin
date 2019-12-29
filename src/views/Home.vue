@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <el-container>
-      <el-aside style="height:100vh;width:auto;margin-right:10px;">
+      <el-aside style="min-height:100vh;width:auto;margin-right:10px;">
         <el-menu
           router
           style="border:none;"
@@ -91,7 +91,7 @@ export default {
     Breadcrumb
   },
   created() {
-    console.log(this.submenuList, "submenuList");
+    // console.log(this.submenuList, "submenuList");
   },
   data() {
     return {

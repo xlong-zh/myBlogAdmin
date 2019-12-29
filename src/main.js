@@ -9,6 +9,11 @@ import "@src/router/permission.js";
 
 Vue.config.productionTip = false;
 
+import {
+  hasPermission,
+  dragPermission,
+  focusPermission
+} from "@src/utils/hasPermission";
 import { ToolFunMixin } from "@/mixins/ToolFunMixin.js";
 import {
   postAction,
@@ -24,6 +29,8 @@ Vue.prototype.$http = {
   deleteAction,
   httpAction
 };
+
+Vue.use(hasPermission);
 
 Vue.mixin(ToolFunMixin);
 

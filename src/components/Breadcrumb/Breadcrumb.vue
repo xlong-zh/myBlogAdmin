@@ -31,7 +31,7 @@ export default {
     },
     getBreadcrumb() {
       let matched = this.$route.matched;
-      console.log(matched, "matched");
+      // console.log(matched, "matched");
       if (this.isHome(matched[0])) {
         matched[0].path = "/homePage/homePage";
         matched[0].meta.title = "首页";

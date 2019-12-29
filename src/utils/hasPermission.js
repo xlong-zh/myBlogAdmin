@@ -1,11 +1,11 @@
-import { USER_AUTH, SYS_BUTTON_AUTH } from '@/store/mutation-types';
+// import { USER_AUTH, SYS_BUTTON_AUTH } from "@/store/mutation-types";
 
 const hasPermission = {
   install(Vue, options) {
     console.log(options);
-    Vue.directive('has', {
+    Vue.directive("has", {
       inserted: (el, binding, vnode) => {
-        console.log('页面权限控制----');
+        console.log("页面权限控制----");
         //节点权限处理，如果命中则不进行全局权限处理
         if (!filterNodePermission(el, binding, vnode)) {
           filterGlobalPermission(el, binding, vnode);
@@ -18,7 +18,7 @@ const hasPermission = {
 const focusPermission = {
   install(Vue, options) {
     console.log(options);
-    Vue.directive('focus', {
+    Vue.directive("focus", {
       // 当被绑定的元素插入到 DOM 中时……
       inserted: function(el) {
         // 聚焦元素
@@ -31,14 +31,17 @@ const focusPermission = {
 const dragPermission = {
   install(Vue, options) {
     console.log(options);
-    Vue.directive('drag', {
+    Vue.directive("drag", {
       // 指令的定义
       inserted: function(el, binding, vnode) {
         vnode = vnode.elm;
         el.onmousedown = event => {
           if (!event.target.className) {
             return;
-          } else if (event.target.className && event.target.className.indexOf('my_dialog_title') === -1) {
+          } else if (
+            event.target.className &&
+            event.target.className.indexOf("my_dialog_title") === -1
+          ) {
             return;
           }
           // if (event.target.className !== 'my_dialog_title') {
@@ -91,16 +94,16 @@ const dragPermission = {
               top = maxY;
             }
             // 赋值移动
-            el.style.left = left + 'px';
-            el.style.top = top + 'px';
+            el.style.left = left + "px";
+            el.style.top = top + "px";
           };
           document.onmouseup = () => {
             document.onmousemove = document.onmouseup = null;
           };
         };
         window.onresize = () => {
-          el.style.left = '50%';
-          el.style.top = '50%';
+          el.style.left = "50%";
+          el.style.top = "50%";
         };
       }
     });
@@ -108,32 +111,43 @@ const dragPermission = {
 };
 
 /**
- * 全局权限控制
+ * 节点权限控制
  */
 export function filterNodePermission(el, binding, vnode) {
-  console.log('页面权限--NODE--');
+  console.log("页面权限--NODE--");
 
   var permissionList = [];
   try {
+    // console.log(vnode, "vnode");
+    // console.log(binding, "binding");
+    // console.log(binding.value, "binding.value");
+    // console.log(el, "el");
+    // console.log(vnode.context, "vnode.context");
     var obj = vnode.context.$props.formData;
+    // console.log(vnode.context.$props, "vnode.contex.propst");
     if (obj) {
       let bpmList = obj.permissionList;
       for (var bpm of bpmList) {
-        if (bpm.type != '2') {
+        if (bpm.type != "2") {
           permissionList.push(bpm);
         }
       }
     }
   } catch (e) {
-    //console.log("页面权限异常----", e);
+    // console.log("页面权限异常----", e);
   }
-  if (permissionList === null || permissionList === '' || permissionList === undefined || permissionList.length <= 0) {
+  if (
+    permissionList === null ||
+    permissionList === "" ||
+    permissionList === undefined ||
+    permissionList.length <= 0
+  ) {
     //el.parentNode.removeChild(el)
     return false;
   }
   let permissions = [];
   for (var item of permissionList) {
-    if (item.type != '2') {
+    if (item.type != "2") {
       permissions.push(item.action);
     }
   }
@@ -156,22 +170,24 @@ export function filterNodePermission(el, binding, vnode) {
  * 全局权限控制
  */
 export function filterGlobalPermission(el, binding, vnode) {
-  console.log('页面权限--Global--');
+  console.log("页面权限--Global--");
 
   var permissionList = [];
   var allPermissionList = [];
 
   //let authList = Vue.ls.get(USER_AUTH);
-  let authList = JSON.parse(sessionStorage.getItem(USER_AUTH) || '[]');
+  let authList = JSON.parse(sessionStorage.getItem("USER_AUTH") || "[]");
   for (var auth of authList) {
-    if (auth.type != '2') {
+    if (auth.type != "2") {
       permissionList.push(auth);
     }
   }
   //console.log("页面权限--Global--",sessionStorage.getItem(SYS_BUTTON_AUTH));
-  let allAuthList = JSON.parse(sessionStorage.getItem(SYS_BUTTON_AUTH) || '[]');
+  let allAuthList = JSON.parse(
+    sessionStorage.getItem("SYS_BUTTON_AUTH") || "[]"
+  );
   for (var gauth of allAuthList) {
-    if (gauth.type != '2') {
+    if (gauth.type != "2") {
       allPermissionList.push(gauth);
     }
   }
@@ -179,13 +195,13 @@ export function filterGlobalPermission(el, binding, vnode) {
   var invalidFlag = false; //无效命中
   if (
     allPermissionList != null &&
-    allPermissionList != '' &&
+    allPermissionList != "" &&
     allPermissionList != undefined &&
     allPermissionList.length > 0
   ) {
     for (var itemG of allPermissionList) {
       if (binding.value === itemG.action) {
-        if (itemG.status == '0') {
+        if (itemG.status == "0") {
           invalidFlag = true;
           break;
         }
@@ -195,16 +211,23 @@ export function filterGlobalPermission(el, binding, vnode) {
   if (invalidFlag) {
     return;
   }
-  if (permissionList === null || permissionList === '' || permissionList === undefined || permissionList.length <= 0) {
+  if (
+    permissionList === null ||
+    permissionList === "" ||
+    permissionList === undefined ||
+    permissionList.length <= 0
+  ) {
     el.parentNode.removeChild(el);
     return;
   }
   let permissions = [];
+  console.log(permissionList, "permissionList");
   for (var item of permissionList) {
-    if (item.type != '2') {
+    if (item.type != "2") {
       permissions.push(item.action);
     }
   }
+  console.log(permissions, "permissions");
   if (!permissions.includes(binding.value)) {
     el.parentNode.removeChild(el);
   }

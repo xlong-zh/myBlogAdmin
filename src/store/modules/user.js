@@ -71,7 +71,7 @@ const user = {
         //   });
       });
     },
-    // 获取用户信息路由和权限列表
+    // 获取用户权限列表
     GetPermissionList({ commit }, params) {
       return new Promise((resolve, reject) => {
         getInfo(params)

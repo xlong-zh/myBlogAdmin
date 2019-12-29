@@ -21,8 +21,8 @@ router.beforeEach((to, from, next) => {
               const redirect = decodeURIComponent(
                 from.query.redirect || to.path
               );
-              console.log(from, "from");
-              console.log(redirect, "redirect");
+              // console.log(from, "from");
+              // console.log(redirect, "redirect");
               if (to.path === redirect) {
                 next({ ...to, replace: true });
               } else {
