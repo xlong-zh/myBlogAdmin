@@ -308,4 +308,30 @@ handleExportXls(fileName) {
       window.URL.revokeObjectURL(url); //释放掉blob对象
     }
   });
-},
+}
+
+// let a = 1;
+// function fnn(x) {
+//   for (let j = x + 2; j < 13; j++) {
+//     a += 1;
+//     fnn(j);
+//   }
+// }
+// function fn() {
+//   for (let i = 2; i < 13; i++) {
+//     a += 1;
+//     fnn(i);
+//   }
+// }
+// fn();
+// console.log(a);
+
+// let num1 = 1;
+// let num2 = 1;
+// let sum = 0;
+// for (let i = 1; i < 13; i++) {
+//   sum = num1 + num2;
+//   num1 = num2;
+//   num2 = sum;
+// }
+// console.log(sum);
