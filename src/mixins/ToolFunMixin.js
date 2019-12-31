@@ -12,7 +12,7 @@ export const ToolFunMixin = {
   methods: {
     getAuthHeaders() {
       return {
-        Authorization: `Bearer ${localStorage.token || ''}`
+        Authorization: `Bearer ${localStorage.getItem('ACCESS_TOKEN') || ''}`
       };
     }
   }

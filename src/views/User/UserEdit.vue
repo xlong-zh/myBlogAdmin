@@ -62,6 +62,7 @@ export default {
     async fetch() {
       const res = await this.$http.getAction(`/rest/user/${this.id}`);
       this.model = res.data;
+      this.model.password = null;
     }
   },
   created() {

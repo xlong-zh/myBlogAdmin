@@ -12,11 +12,15 @@
       <el-table-column label="操作" width="100">
         <template slot-scope="scope">
           <el-button
+            v-has
             @click="$router.push(`/image/edit/${scope.row._id}`)"
             type="text"
             size="small"
-          >编辑</el-button>
-          <el-button @click="remove(scope.row)" type="text" size="small">删除</el-button>
+            >编辑</el-button
+          >
+          <el-button v-has @click="remove(scope.row)" type="text" size="small"
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -71,5 +75,4 @@ export default {
   }
 };
 </script>
-<style lang='scss' scoped>
-</style>
+<style lang="scss" scoped></style>
