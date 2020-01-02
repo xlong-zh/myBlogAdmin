@@ -22,7 +22,7 @@ const dragPermission = {
         el.onmousedown = event => {
           if (!event.target.className) {
             return;
-          } else if (event.target.className && event.target.className.indexOf('my_dialog_title') === -1) {
+          } else if (event.target.className && String(event.target.className).indexOf('my_dialog_title') === -1) {
             return;
           }
           // if (event.target.className !== 'my_dialog_title') {

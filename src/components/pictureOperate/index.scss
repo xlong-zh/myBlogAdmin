@@ -1,0 +1,50 @@
+.fixContent {
+  position: fixed;
+  background: rgba(0, 0, 0, 0.5);
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 55;
+  .imgBox {
+    font-size: 0;
+    text-align: center;
+    height: calc(100% - 150px);
+    width: 100%;
+    // overflow: hidden;
+    position: relative;
+    .position {
+      display: inline-block;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      .picture {
+        display: inline-block;
+        .thisPic {
+          height: 350px;
+        }
+      }
+    }
+  }
+  .icon {
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    transform: translate(-50%, 0);
+    height: 150px;
+    padding-top: 20px;
+    box-sizing: border-box;
+    text-align: center;
+    z-index: 999;
+  }
+}
+.icon-box {
+  display: inline-block;
+}
+.icon-item {
+  font-size: 35px;
+  color: #13C2C2;
+  margin-right: 15px;
+  cursor: pointer;
+}

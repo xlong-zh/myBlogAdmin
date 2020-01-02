@@ -16,11 +16,7 @@
             <img src="../assets/logo.jpg" alt />
           </div>
           <template v-for="item in submenuList">
-            <el-menu-item
-              v-if="!item.children"
-              :key="item.path"
-              :index="item.path"
-            >
+            <el-menu-item v-if="!item.children" :key="item.path" :index="item.path">
               <i :class="item.meta.icon"></i>
               <span slot="title">{{ item.meta.title }}</span>
             </el-menu-item>
@@ -29,39 +25,29 @@
                 <i :class="item.meta.icon"></i>
                 <span slot="title">{{ item.meta.title }}</span>
               </template>
-              <el-menu-item
-                v-for="itemcld in item.children"
-                :key="itemcld.path"
-                :index="itemcld.path"
-                >{{ itemcld.meta.title }}</el-menu-item
-              >
+              <el-menu-item v-for="itemcld in item.children" :key="itemcld.path" :index="itemcld.path">{{ itemcld.meta.title }}</el-menu-item>
             </el-submenu>
           </template>
         </el-menu>
       </el-aside>
       <el-container>
         <el-header style="display:flex;align-items: center;margin-top:30px;">
-          <div
-            style="font-size:30px;margin-right:15px;padding-right:15px;border-right:1px solid #999"
-            @click="isCollapse = !isCollapse"
-          >
+          <div style="font-size:30px;margin-right:15px;padding-right:15px;border-right:1px solid #999" @click="isCollapse = !isCollapse">
             <i v-show="!isCollapse" class="el-icon-s-fold"></i>
             <i v-show="isCollapse" class="el-icon-s-unfold"></i>
           </div>
           <Breadcrumb style="flex:1;"></Breadcrumb>
           <div>
-            <span
-              v-if="userpml"
-              style=" font-size: 16px;font-weight: bold;padding-right: 30px;"
-              >朋友你好!</span
-            >
+            <span v-if="userpml" style=" font-size: 16px;font-weight: bold;padding-right: 30px;">朋友你好!</span>
             <el-button type="info" @click="toLogout">登出</el-button>
           </div>
         </el-header>
         <el-main>
           <TopTags-nav></TopTags-nav>
           <div style="background:#ffffff;margin:12px;">
-            <router-view :key="$route.path"></router-view>
+            <transition mode="out-in" name="routerleft">
+              <router-view :key="$route.path"></router-view>
+            </transition>
           </div>
         </el-main>
       </el-container>
@@ -82,9 +68,9 @@ function getSubmenuList(list) {
   });
   return submenuList;
 }
-import TopTagsNav from "@comp/menu/TopTagsNav";
-import Breadcrumb from "@comp/Breadcrumb/Breadcrumb";
-import { mapActions } from "vuex";
+import TopTagsNav from '@comp/menu/TopTagsNav';
+import Breadcrumb from '@comp/Breadcrumb/Breadcrumb';
+import { mapActions } from 'vuex';
 export default {
   components: {
     TopTagsNav,
@@ -104,19 +90,19 @@ export default {
     },
     userpml() {
       const userpml = this.$store.getters.permissionList;
-      if (userpml && userpml.length && userpml.includes("visitor")) {
+      if (userpml && userpml.length && userpml.includes('visitor')) {
         return true;
       }
       return false;
     }
   },
   methods: {
-    ...mapActions(["Logout"]),
+    ...mapActions(['Logout']),
     toLogout() {
-      this.$confirm("确定退出", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+      this.$confirm('确定退出', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
           this.Logout().then(() => {
@@ -124,10 +110,10 @@ export default {
             // window.location.href = "/";
             window.location.reload();
           });
-          this.$message.success("退出成功");
+          this.$message.success('退出成功');
         })
         .catch(() => {
-          this.$message.info("已取消操作");
+          this.$message.info('已取消操作');
         });
     },
     handleOpen(key, keyPath) {
@@ -139,6 +125,24 @@ export default {
   }
 };
 </script>
+<style lang="scss">
+.routerleft-enter {
+  transform: translateX(100%);
+}
+.routerleft-enter-active {
+  transition: 0.5s;
+}
+.routerleft-leave {
+  opacity: 1;
+}
+.routerleft-leave-to {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+.routerleft-leave-active {
+  transition: 0.5s;
+}
+</style>
 <style lang="scss" scoped>
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;
