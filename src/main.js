@@ -8,12 +8,13 @@ import './assets/common.scss';
 import '@src/router/permission.js';
 
 Vue.config.productionTip = false;
-
+import vueBus from '@/utils/vueBus';
 import { ToolFunMixin } from '@/mixins/ToolFunMixin.js';
 import { hasPermission, dragPermission, focusPermission } from '@/utils/hasPermission';
 import { postAction, putAction, getAction, deleteAction, httpAction } from '@/api/manage.js';
 Vue.prototype.$http = { postAction, putAction, getAction, deleteAction, httpAction };
 
+Vue.use(vueBus);
 Vue.use(hasPermission);
 Vue.use(dragPermission);
 Vue.use(focusPermission);
