@@ -1,0 +1,4 @@
+  *.js linguist-language=vueSPA
+  *.css linguist-language=vueSPA
+  *.html linguist-language=vueSPA
+  *.vue linguist-language=vueSPA
