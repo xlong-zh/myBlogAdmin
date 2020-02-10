@@ -102,8 +102,11 @@ const hasPermission = {
           console.log('管理员权限');
           return;
         } else {
-          if (binding.value && !permissionList.includes(binding.value)) {
+          if (binding.value && permissionList.includes(binding.value)) {
+            el.innerHTML = '查看';
+            // console.log(el);
             console.log('此处手动开放权限');
+            return;
           } else {
             el.parentNode.removeChild(el);
             return;

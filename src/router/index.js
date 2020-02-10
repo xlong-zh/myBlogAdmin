@@ -55,7 +55,7 @@ export const asyncRouterMap = [
         meta: {
           menuHide: true,
           title: '编辑文章',
-          role: ['admin', 'super_admin']
+          role: ['admin', 'super_admin', 'visitor']
         }
       },
       {
@@ -95,7 +95,7 @@ export const asyncRouterMap = [
             meta: {
               menuHide: true,
               title: '编辑分类',
-              role: ['admin', 'super_admin']
+              role: ['admin', 'super_admin', 'visitor']
             }
           },
           {
@@ -137,7 +137,7 @@ export const asyncRouterMap = [
             meta: {
               menuHide: true,
               title: '编辑图片',
-              role: ['admin', 'super_admin']
+              role: ['admin', 'super_admin', 'visitor']
             }
           },
           {
