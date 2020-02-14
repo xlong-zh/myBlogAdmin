@@ -15,6 +15,7 @@ import 'tinymce/plugins/media'; // 插入视频插件
 import 'tinymce/plugins/table'; // 插入表格插件
 import 'tinymce/plugins/lists'; // 列表插件
 import 'tinymce/plugins/wordcount'; // 字数统计插件
+import 'tinymce/plugins/autoresize'; // 字数统计插件
 export default {
   components: {
     Editor
@@ -36,7 +37,7 @@ export default {
     },
     plugins: {
       type: [String, Array],
-      default: 'lists image media table wordcount'
+      default: 'lists image media table wordcount autoresize'
     },
     toolbar: {
       type: [String, Array],
@@ -53,9 +54,10 @@ export default {
         content_css: `${this.baseUrl}/tinymce/skins/content/default/content.css`,
         // skin_url: `${this.baseUrl}/tinymce/skins/ui/oxide-dark`, // 暗色系
         // content_css: `${this.baseUrl}/tinymce/skins/content/dark/content.css`, // 暗色系
-        height: 300,
         plugins: this.plugins,
         toolbar: this.toolbar,
+        min_height: 300,
+        autoresize_on_init: true,
         branding: false,
         menubar: false,
         // 此处为图片上传处理函数，这个直接用了base64的图片形式上传图片，
