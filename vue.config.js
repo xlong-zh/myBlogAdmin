@@ -14,9 +14,9 @@ module.exports = {
   // 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建。
   productionSourceMap: false,
   //基本路径
-  publicPath: '/admin/',
+  publicPath: './',
   // 输出文件目录
-  outputDir: process.env.VUE_APP_CURRENTMODE === 'devtest' ? 'devtest' : 'dist',
+  outputDir: 'dist',
 
   chainWebpack: config => {
     // config
