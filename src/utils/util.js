@@ -58,7 +58,7 @@ export function formatDate(value, fmt) {
       'm+': getDate.getMinutes(),
       's+': getDate.getSeconds(),
       'q+': Math.floor((getDate.getMonth() + 3) / 3),
-      S: getDate.getMilliseconds()
+      S: getDate.getMilliseconds(),
     };
     if (/(y+)/.test(fmt)) {
       fmt = fmt.replace(RegExp.$1, (getDate.getFullYear() + '').substr(4 - RegExp.$1.length));
@@ -83,16 +83,16 @@ export function generateIndexRouter(data) {
       path: '/',
       name: 'dashboard',
       //component: () => import('@/components/layouts/BasicLayout'),
-      component: resolve => require(['@/components/layouts/TabLayout'], resolve),
+      component: (resolve) => require(['@/components/layouts/TabLayout'], resolve),
       meta: { title: '首页' },
       redirect: '/dashboard/analysis',
-      children: [...generateChildRouters(data)]
+      children: [...generateChildRouters(data)],
     },
     {
       path: '*',
       redirect: '/404',
-      hidden: true
-    }
+      hidden: true,
+    },
   ];
   return indexRouter;
 }
@@ -119,15 +119,15 @@ function generateChildRouters(data) {
       path: item.path,
       name: item.name,
       redirect: item.redirect,
-      component: resolve => require(['@/' + component + '.vue'], resolve),
+      component: (resolve) => require(['@/' + component + '.vue'], resolve),
       hidden: item.hidden,
       //component:()=> import(`@/views/${item.component}.vue`),
       meta: {
         title: item.meta.title,
         icon: item.meta.icon,
         url: item.meta.url,
-        permissionList: item.meta.permissionList
-      }
+        permissionList: item.meta.permissionList,
+      },
     };
     if (item.alwaysShow) {
       menu.alwaysShow = true;
@@ -176,7 +176,7 @@ export function randomNumber() {
   if (arguments.length === 1) {
     let [length] = arguments;
     // 生成指定长度的随机数字，首位一定不是 0
-    let nums = [...Array(length).keys()].map(i => (i > 0 ? random(0, 9) : random(1, 9)));
+    let nums = [...Array(length).keys()].map((i) => (i > 0 ? random(0, 9) : random(1, 9)));
     return parseInt(nums.join(''));
   } else if (arguments.length >= 2) {
     let [min, max] = arguments;
@@ -218,7 +218,7 @@ export function randomUUID() {
  * @returns {*}
  */
 export function underLine2CamelCase(string) {
-  return string.replace(/_([a-z])/g, function (all, letter) {
+  return string.replace(/_([a-z])/g, function(all, letter) {
     return letter.toUpperCase();
   });
 }
@@ -280,7 +280,7 @@ export function setTimeSpace(setATime, setBTime) {
   setBTime = `${Y2}/${M2}/${D2} 00:00:00`; // 之前一个月
 }
 /* 导出ant-vue */
-handleExportXls(fileName) {
+function handleExportXls(fileName) {
   if (!fileName || typeof fileName != 'string') {
     fileName = '导出文件';
   }
@@ -289,7 +289,7 @@ handleExportXls(fileName) {
   //   param['selections'] = this.selectedRowKeys.join(',');
   // }
   // console.log('导出参数', param);
-  downFile('url', { param }).then(data => {
+  downFile('url', { param }).then((data) => {
     if (!data) {
       this.$message.warning('文件下载失败');
       return;
@@ -309,7 +309,27 @@ handleExportXls(fileName) {
     }
   });
 }
-
+//函数节流
+const throttle = (fun, delay) => {
+  let last = null;
+  return () => {
+    const now = +new Date();
+    if (now - last > delay) {
+      fun();
+      last = now;
+    }
+  };
+};
+//函数防抖
+const debouce = (fun, delay) => {
+  let timer = null;
+  return () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      fun();
+    }, delay);
+  };
+};
 // let a = 1;
 // function fnn(x) {
 //   for (let j = x + 2; j < 13; j++) {
