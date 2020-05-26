@@ -25,14 +25,19 @@
                 <i :class="item.meta.icon"></i>
                 <span slot="title">{{ item.meta.title }}</span>
               </template>
-              <el-menu-item v-for="itemcld in item.children" :key="itemcld.path" :index="itemcld.path">{{ itemcld.meta.title }}</el-menu-item>
+              <el-menu-item v-for="itemcld in item.children" :key="itemcld.path" :index="itemcld.path">{{
+                itemcld.meta.title
+              }}</el-menu-item>
             </el-submenu>
           </template>
         </el-menu>
       </el-aside>
       <el-container>
         <el-header style="display:flex;align-items: center;margin-top:30px;">
-          <div style="font-size:30px;margin-right:15px;padding-right:15px;border-right:1px solid #999" @click="isCollapse = !isCollapse">
+          <div
+            style="font-size:30px;margin-right:15px;padding-right:15px;border-right:1px solid #999"
+            @click="isCollapse = !isCollapse"
+          >
             <i v-show="!isCollapse" class="el-icon-s-fold"></i>
             <i v-show="isCollapse" class="el-icon-s-unfold"></i>
           </div>
@@ -44,7 +49,7 @@
         </el-header>
         <el-main>
           <TopTags-nav></TopTags-nav>
-          <div style="background:#ffffff;margin:12px;">
+          <div style="background:#ffffff;margin:12px;padding:15px 0;">
             <transition mode="out-in" name="routerleft">
               <router-view :key="$route.path"></router-view>
             </transition>

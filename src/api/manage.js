@@ -107,3 +107,12 @@ export function downFile(url, parameter) {
     responseType: 'blob'
   });
 }
+//上传图片
+export function imgUpload(url, parameter) {
+  return http({
+    url: url,
+    data: parameter,
+    method: 'post',
+    headers: { 'Content-Type': 'multipart/form-data' }
+  });
+}

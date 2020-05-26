@@ -2,16 +2,23 @@
   <div>
     <h1>图片列表</h1>
     <el-table :data="model" v-if="model">
-      <el-table-column prop="name" label="名称" width="150"></el-table-column>
-      <el-table-column prop="img" label="图标" width="100">
+      <el-table-column prop="name" label="名称" width="160"></el-table-column>
+      <el-table-column prop="img" label="图标" width="120">
         <template slot-scope="scope">
-          <img @click="bigPicture(scope.row.img)" :src="scope.row.img" style="height:50px;cursor: pointer;" alt />
+          <img
+            @click="bigPicture(scope.row.img)"
+            :src="scope.row.img"
+            style="width:70px;height:50px;cursor: pointer;"
+            alt
+          />
         </template>
       </el-table-column>
-      <el-table-column prop="remark" label="备注" width="180"></el-table-column>
+      <el-table-column prop="remark" label="备注" width="200"></el-table-column>
       <el-table-column label="操作" width="100">
         <template slot-scope="scope">
-          <el-button v-has @click="$router.push(`/image/edit/${scope.row._id}`)" type="text" size="small">编辑</el-button>
+          <el-button v-has="'visitor'" @click="$router.push(`/image/edit/${scope.row._id}`)" type="text" size="small"
+            >编辑</el-button
+          >
           <el-button v-has @click="remove(scope.row)" type="text" size="small">删除</el-button>
         </template>
       </el-table-column>
