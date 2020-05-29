@@ -47,34 +47,60 @@ export function filterObj(obj) {
  * @returns {*}
  */
 export function formatDate(value, fmt) {
-  var regPos = /^\d+(\.\d+)?$/;
-  if (regPos.test(value)) {
-    //如果是数字
-    let getDate = new Date(value);
-    let o = {
-      'M+': getDate.getMonth() + 1,
-      'd+': getDate.getDate(),
-      'h+': getDate.getHours(),
-      'm+': getDate.getMinutes(),
-      's+': getDate.getSeconds(),
-      'q+': Math.floor((getDate.getMonth() + 3) / 3),
-      S: getDate.getMilliseconds(),
-    };
-    if (/(y+)/.test(fmt)) {
-      fmt = fmt.replace(RegExp.$1, (getDate.getFullYear() + '').substr(4 - RegExp.$1.length));
+  // var regPos = /^\d+(\.\d+)?$/;
+  // if (regPos.test(value)) {
+  //如果是数字
+  let getDate = new Date(value);
+  let opt = {
+    'Y+': getDate.getFullYear().toString(),
+    'M+': (getDate.getMonth() + 1).toString(),
+    'D+': getDate.getDate().toString(),
+    'h+': getDate.getHours().toString(),
+    'm+': getDate.getMinutes().toString(),
+    's+': getDate.getSeconds().toString(),
+  };
+  for (let k in opt) {
+    // if (new RegExp('(' + k + ')').test(fmt)) {
+    // 	console.log(opt[k]);
+    // 	console.log(RegExp.$1.length);
+    // 	fmt = fmt.replace(RegExp.$1, RegExp.$1.length === 1 ? opt[k] : ('00' + opt[k]).substr(('' + opt[k]).length));
+    // }
+    let ret = new RegExp('(' + k + ')').exec(fmt);
+    if (ret) {
+      fmt = fmt.replace(ret[1], ret[1].length == 1 ? opt[k] : opt[k].padStart(ret[1].length, '0'));
     }
-    for (let k in o) {
-      if (new RegExp('(' + k + ')').test(fmt)) {
-        fmt = fmt.replace(RegExp.$1, RegExp.$1.length === 1 ? o[k] : ('00' + o[k]).substr(('' + o[k]).length));
-      }
-    }
-    return fmt;
-  } else {
-    //TODO
-    value = value.trim();
-    return value.substr(0, fmt.length);
   }
+  return fmt;
 }
+// export function formatDate(value, fmt) {
+//   var regPos = /^\d+(\.\d+)?$/;
+//   if (regPos.test(value)) {
+//     //如果是数字
+//     let getDate = new Date(value);
+//     let o = {
+//       'M+': getDate.getMonth() + 1,
+//       'd+': getDate.getDate(),
+//       'h+': getDate.getHours(),
+//       'm+': getDate.getMinutes(),
+//       's+': getDate.getSeconds(),
+//       'q+': Math.floor((getDate.getMonth() + 3) / 3),
+//       S: getDate.getMilliseconds(),
+//     };
+//     if (/(y+)/.test(fmt)) {
+//       fmt = fmt.replace(RegExp.$1, (getDate.getFullYear() + '').substr(4 - RegExp.$1.length));
+//     }
+//     for (let k in o) {
+//       if (new RegExp('(' + k + ')').test(fmt)) {
+//         fmt = fmt.replace(RegExp.$1, RegExp.$1.length === 1 ? o[k] : ('00' + o[k]).substr(('' + o[k]).length));
+//       }
+//     }
+//     return fmt;
+//   } else {
+//     //TODO
+//     value = value.trim();
+//     return value.substr(0, fmt.length);
+//   }
+// }
 
 // 生成首页路由
 export function generateIndexRouter(data) {
@@ -330,6 +356,21 @@ const debouce = (fun, delay) => {
     }, delay);
   };
 };
+//将base64转换为文件对象
+export function dataURLtoFile(dataurl, filename) {
+  var arr = dataurl.split(',');
+  var mime = arr[0].match(/:(.*?);/)[1];
+  var bstr = atob(arr[1]);
+  var n = bstr.length;
+  var u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  //转换成file对象
+  return new File([u8arr], filename, { type: mime });
+  //转换成成blob对象
+  //return new Blob([u8arr],{type:mime});
+}
 // let a = 1;
 // function fnn(x) {
 //   for (let j = x + 2; j < 13; j++) {
