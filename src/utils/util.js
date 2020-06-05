@@ -396,3 +396,55 @@ export function dataURLtoFile(dataurl, filename) {
 //   num2 = sum;
 // }
 // console.log(sum);
+
+/* 导出 */
+export function handleExportXls2() {
+  let paramsStr = encodeURI(JSON.stringify(this.getQueryParams()));
+  let url = `${window._CONFIG['domianURL']}/${this.url.exportXlsUrl}?paramsStr=${paramsStr}`;
+  window.location.href = url;
+}
+export function handleExportXls(fileName) {
+  if (!fileName || typeof fileName != 'string') {
+    fileName = '导出文件';
+  }
+  let param = { ...this.queryParam };
+  if (this.selectedRowKeys && this.selectedRowKeys.length > 0) {
+    param['selections'] = this.selectedRowKeys.join(',');
+  }
+  console.log('导出参数', param);
+  downFile(this.url.exportXlsUrl, param).then((data) => {
+    if (!data) {
+      this.$message.warning('文件下载失败');
+      return;
+    }
+    if (typeof window.navigator.msSaveBlob !== 'undefined') {
+      window.navigator.msSaveBlob(new Blob([data]), fileName + '.xls');
+    } else {
+      let url = window.URL.createObjectURL(new Blob([data]));
+      let link = document.createElement('a');
+      link.style.display = 'none';
+      link.href = url;
+      link.setAttribute('download', fileName + '.xls');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link); //下载完成移除元素
+      window.URL.revokeObjectURL(url); //释放掉blob对象
+    }
+  });
+}
+/* 导入 */
+export function handleImportExcel(info) {
+  if (info.file.status !== 'uploading') {
+    console.log(info.file, info.fileList);
+  }
+  if (info.file.status === 'done') {
+    if (info.file.response.success) {
+      this.$message.success(`${info.file.name} 文件上传成功`);
+      this.loadData();
+    } else {
+      this.$message.error(`${info.file.name} ${info.file.response.message}.`);
+    }
+  } else if (info.file.status === 'error') {
+    this.$message.error(`文件上传失败: ${info.file.msg} `);
+  }
+}
