@@ -38,6 +38,15 @@ export const asyncRouterMap = [
         }
       },
       {
+        path: '/vue-d3',
+        name: 'vue-d3',
+        component: () => import('@views/HomePage/vue-d3.vue'),
+        meta: {
+          icon: 'el-icon-s-home',
+          title: '拓扑图'
+        }
+      },
+      {
         path: '/article/create',
         name: 'article-create',
         component: () => import('@views/Article/ArticleEdit.vue'),
