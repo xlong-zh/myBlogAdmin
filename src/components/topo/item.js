@@ -8,6 +8,7 @@
 import { type, bgColor, icon, name } from './enum';
 import * as util from './util';
 import * as d3 from 'd3';
+import { MessageBox } from 'element-ui';
 
 class Item {
   constructor(params) {
@@ -57,8 +58,17 @@ class Item {
    * 删除元素
    */
   remove() {
-    this._group.remove();
-    this.onRemove(this);
+    MessageBox.confirm('确认删除?', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      // type: 'warning',
+      center: true,
+    })
+      .then(() => {
+        this._group.remove();
+        this.onRemove(this);
+      })
+      .catch(() => {});
   }
 
   /**
@@ -269,7 +279,6 @@ class Item {
    * @private
    */
   _onGroupDragstart() {
-    console.log(this);
     this._dragDeltaX = d3.event.x - this.x;
     this._dragDeltaY = d3.event.y - this.y;
   }
@@ -304,7 +313,8 @@ class Item {
     d3.event.stopPropagation();
     this._group.classed('active', true);
     // this.onClick(this);
-    window.dbClickTimer = setTimeout(() => {
+    clearTimeout(this.dbClickTimer);
+    this.dbClickTimer = setTimeout(() => {
       // click 事件的处理
       this.onDblclick(this);
     }, 300);
@@ -315,8 +325,8 @@ class Item {
    */
   _onDblclick() {
     // 关闭单击事件
-    clearTimeout(window.dbClickTimer);
     d3.event.stopPropagation();
+    clearTimeout(this.dbClickTimer);
     // this.onDblclick(this);
     this.remove();
   }

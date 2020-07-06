@@ -73,6 +73,23 @@ export default {
   },
   mounted() {
     let container = d3.select('#topo-chart');
+    // 箭头
+    var defs = container.append('defs');
+    var arrowMarker = defs
+      .append('marker')
+      .attr('id', 'arrow')
+      .attr('markerUnits', 'strokeWidth')
+      .attr('markerWidth', '8')
+      .attr('markerHeight', '8')
+      .attr('viewBox', '0 0 12 12')
+      .attr('refX', '13')
+      .attr('refY', '6')
+      .attr('orient', 'auto');
+    arrowMarker
+      .append('path')
+      .attr('d', 'M2,2 L10,6 L2,10 L6,6 L2,2')
+      .attr('fill', '#999');
+
     chart = new Chart({
       container: container,
       onItemDblclick: this.onItemDblclick,
@@ -122,7 +139,6 @@ export default {
           );
         })
         .on('drag', function() {
-          console.log(d3.event.sourceEvent.x - dragDeltaX);
           getItemPosition(
             $dragItem,
             d3.event.sourceEvent.x - dragDeltaX + window.pageXOffset,
@@ -166,6 +182,7 @@ export default {
       localStorage.setItem('items', JSON.stringify(chart.getItems()));
     },
     loadData() {
+      // console.log(JSON.parse(localStorage.getItem('items')))
       chart.setItems(JSON.parse(localStorage.getItem('items')));
     },
     onItemDblclick(item) {

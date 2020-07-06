@@ -5,23 +5,23 @@
  * @date: 2018-5-8
  */
 
-import Item from './item'
-import Line from './line'
-import * as d3 from 'd3'
-import _ from 'loadsh'
+import Item from './item';
+import Line from './line';
+import * as d3 from 'd3';
+import _ from 'loadsh';
 
 class Chart {
   constructor(params) {
-    this.container = params.container
-    this.onItemDblclick = params.onItemDblclick
+    this.container = params.container;
+    this.onItemDblclick = params.onItemDblclick;
 
-    this.list = {}
-    this.lineList = {}
-    this.drawingLine = false
-    this.currentLine = null
-    this.selectedLine = null
+    this.list = {};
+    this.lineList = {};
+    this.drawingLine = false;
+    this.currentLine = null;
+    this.selectedLine = null;
 
-    this._bindEvent()
+    this._bindEvent();
   }
 
   /**
@@ -46,50 +46,58 @@ class Chart {
       onMouseup: this._onItemMouseup.bind(this),
       onRemove: this._onItemRemove.bind(this),
       onPortMousedown: this._onPortMousedown.bind(this),
-      onPortMouseup: this._onPortMouseup.bind(this)
-    })
+      onPortMouseup: this._onPortMouseup.bind(this),
+    });
 
-    this.list[item.id] = item
-    return item
+    this.list[item.id] = item;
+    return item;
   }
 
   /**
    * 获取所有元素
    */
   getItems() {
-    return this.list
+    return this.list;
   }
 
   /**
    * 存放已有元素
    */
   setItems(items) {
-    _.forEach(items, item => {
-      item.inputIds = new Set(item.inputIds)
-      item.outputIds = new Set(item.outputIds)
-      this.addItem(item)
-    })
+    _.forEach(items, (item) => {
+      item.inputIds =
+        Object.prototype.toString.call(item.inputIds) === '[object Set]'
+          ? item.inputIds
+          : new Set();
+      item.outputIds =
+        Object.prototype.toString.call(item.outputIds) === '[object Set]'
+          ? item.outputIds
+          : new Set();
+      // item.inputIds = new Set(item.inputIds);
+      // item.outputIds = new Set(item.outputIds);
+      this.addItem(item);
+    });
 
-    _.forEach(this.list, fromItem => {
-      fromItem.outputIds.forEach(outputId => {
-        let targetItem = this.list[outputId]
-        let line = this._addLine(fromItem, 'output', targetItem, 'input')
-        line.updatePath()
-        line.fromItem['outputPathIds'].add(line.id)
-        line.targetItem['inputPathIds'].add(line.id)
-        this.lineList[line.id] = line
-      })
-    })
+    _.forEach(this.list, (fromItem) => {
+      fromItem.outputIds.forEach((outputId) => {
+        let targetItem = this.list[outputId];
+        let line = this._addLine(fromItem, 'output', targetItem, 'input');
+        line.updatePath();
+        line.fromItem['outputPathIds'].add(line.id);
+        line.targetItem['inputPathIds'].add(line.id);
+        this.lineList[line.id] = line;
+      });
+    });
   }
 
   /**
    * 绑定事件
    */
   _bindEvent() {
-    this.container.on('mousemove', this._onMousemove.bind(this))
-    this.container.on('mouseup', this._onMouseup.bind(this))
-    this.container.on('click', this._onClick.bind(this))
-    d3.select('body').on('keyup', this._onKeyup.bind(this))
+    this.container.on('mousemove', this._onMousemove.bind(this));
+    this.container.on('mouseup', this._onMouseup.bind(this));
+    this.container.on('click', this._onClick.bind(this));
+    d3.select('body').on('keyup', this._onKeyup.bind(this));
   }
 
   /**
@@ -106,29 +114,29 @@ class Chart {
       fromPortType: fromPortType,
       targetItem: targetItem,
       targetPortType: targetPortType,
-      onClick: this._onLineClick.bind(this)
-    })
+      onClick: this._onLineClick.bind(this),
+    });
   }
 
   /**
    * 鼠标按下连线具柄回调
    */
   _onPortMousedown(fromItem, fromPortType) {
-    this.currentLine = this._addLine(fromItem, fromPortType)
-    this.drawingLine = true
+    this.currentLine = this._addLine(fromItem, fromPortType);
+    this.drawingLine = true;
   }
 
   /**
    * 鼠标在画板中移动
    */
   _onMousemove() {
-    if(this.drawingLine && this.currentLine) {
+    if (this.drawingLine && this.currentLine) {
       let coordinates = {
         x: d3.event.offsetX,
-        y: d3.event.offsetY
-      }
-      this.currentLine.updatePath(coordinates)
-      this.currentLine.path.classed('active', true)
+        y: d3.event.offsetY,
+      };
+      this.currentLine.updatePath(coordinates);
+      this.currentLine.path.classed('active', true);
     }
   }
 
@@ -139,30 +147,33 @@ class Chart {
    * @private
    */
   _onPortMouseup(targetItem, targetPortType) {
-    if(!this.drawingLine) {
-      return
+    if (!this.drawingLine) {
+      return;
     }
 
     // 同一IO类型不允许连线
-    if(this.currentLine.fromPortType === targetPortType) {
-      this.currentLine.remove()
-      this.currentLine = null
-      return
+    if (this.currentLine.fromPortType === targetPortType) {
+      this.currentLine.remove();
+      this.currentLine = null;
+      return;
     }
 
-    this.currentLine.targetPortType = targetPortType
-    this.currentLine.targetItem = targetItem
-    this.currentLine.updatePath()
-    this.currentLine.path.classed('active', false)
+    this.currentLine.targetPortType = targetPortType;
+    this.currentLine.targetItem = targetItem;
+    this.currentLine.updatePath();
+    this.currentLine.path.classed('active', false);
 
     // 记录input/output元素的id
-    this.currentLine.fromItem[this.currentLine.fromPortType + 'Ids'].add(targetItem.id)
-    this.currentLine.fromItem[this.currentLine.fromPortType + 'PathIds'].add(this.currentLine.id)
-    this.currentLine.targetItem[this.currentLine.targetPortType + 'Ids'].add(this.currentLine.fromItem.id)
-    this.currentLine.targetItem[this.currentLine.targetPortType + 'PathIds'].add(this.currentLine.id)
-
-    this.lineList[this.currentLine.id] = this.currentLine
-    this.drawingLine = false
+    this.currentLine.fromItem[this.currentLine.fromPortType + 'Ids'].add(targetItem.id);
+    this.currentLine.fromItem[this.currentLine.fromPortType + 'PathIds'].add(this.currentLine.id);
+    this.currentLine.targetItem[this.currentLine.targetPortType + 'Ids'].add(
+      this.currentLine.fromItem.id
+    );
+    this.currentLine.targetItem[this.currentLine.targetPortType + 'PathIds'].add(
+      this.currentLine.id
+    );
+    this.lineList[this.currentLine.id] = this.currentLine;
+    this.drawingLine = false;
   }
 
   /**
@@ -171,49 +182,49 @@ class Chart {
    * @private
    */
   _onItemMouseup(targetItem) {
-    if(!this.drawingLine) return
+    if (!this.drawingLine) return;
 
-    if(this.currentLine.fromPortType === 'input' && targetItem.getOutputPort()) {
-      this._onPortMouseup(targetItem, 'output')
-      return
+    if (this.currentLine.fromPortType === 'input' && targetItem.getOutputPort()) {
+      this._onPortMouseup(targetItem, 'output');
+      return;
     }
 
-    if(this.currentLine.fromPortType === 'output' && targetItem.getInputPort()) {
-      this._onPortMouseup(targetItem, 'input')
-      return
+    if (this.currentLine.fromPortType === 'output' && targetItem.getInputPort()) {
+      this._onPortMouseup(targetItem, 'input');
+      return;
     }
 
-    this._onMouseup()
+    this._onMouseup();
   }
 
   /**
    * 鼠标在画板空白位置抬起
    */
   _onMouseup() {
-    if(!this.drawingLine) return
+    if (!this.drawingLine) return;
 
-   if(this.currentLine) {
-      this.currentLine.remove()
-      this.currentLine = null
+    if (this.currentLine) {
+      this.currentLine.remove();
+      this.currentLine = null;
     }
-   this.drawingLine = false
-   }
+    this.drawingLine = false;
+  }
 
-   /**
+  /**
    * 元素移动回调事件
    * @param item
    */
   _onItemDrag(item) {
-    if(item.inputPathIds.size) {
-      item.inputPathIds.forEach(id => {
-        this.lineList[id].updatePath()
-      })
+    if (item.inputPathIds.size) {
+      item.inputPathIds.forEach((id) => {
+        this.lineList[id].updatePath();
+      });
     }
 
-    if(item.outputPathIds.size) {
-      item.outputPathIds.forEach(id => {
-        this.lineList[id].updatePath()
-      })
+    if (item.outputPathIds.size) {
+      item.outputPathIds.forEach((id) => {
+        this.lineList[id].updatePath();
+      });
     }
   }
 
@@ -222,14 +233,14 @@ class Chart {
    * @private
    */
   _onClick() {
-    if(this.selectedLine) {
-      this.selectedLine.blur()
-      this.selectedLine = null
+    if (this.selectedLine) {
+      this.selectedLine.blur();
+      this.selectedLine = null;
     }
 
-    if(this.selectedItem) {
-      this.selectedItem.blur()
-      this.selectedItem = null
+    if (this.selectedItem) {
+      this.selectedItem.blur();
+      this.selectedItem = null;
     }
   }
 
@@ -239,11 +250,11 @@ class Chart {
    * @private
    */
   _onLineClick(line) {
-    if(line === this.selectedLine) return
-    if(this.selectedLine) {
-      this.selectedLine.blur()
+    if (line === this.selectedLine) return;
+    if (this.selectedLine) {
+      this.selectedLine.blur();
     }
-    this.selectedLine = line
+    this.selectedLine = line;
   }
 
   /**
@@ -252,11 +263,11 @@ class Chart {
    * @private
    */
   _onItemClick(item) {
-    if(item === this.selectedItem) return
-    if(this.selectedItem) {
-      this.selectedItem.blur()
+    if (item === this.selectedItem) return;
+    if (this.selectedItem) {
+      this.selectedItem.blur();
     }
-    this.selectedItem = item
+    this.selectedItem = item;
   }
 
   /**
@@ -265,7 +276,7 @@ class Chart {
    * @private
    */
   _onItemDblclick(item) {
-    this.onItemDblclick(item)
+    this.onItemDblclick(item);
   }
 
   /**
@@ -274,18 +285,18 @@ class Chart {
    * @private
    */
   _onItemRemove(item) {
-    if(item.inputPathIds.size) {
-      item.inputPathIds.forEach(id => {
-        this.lineList[id].remove()
-        delete this.lineList[id]
-      })
+    if (item.inputPathIds.size) {
+      item.inputPathIds.forEach((id) => {
+        this.lineList[id].remove();
+        delete this.lineList[id];
+      });
     }
 
-    if(item.outputPathIds.size) {
-      item.outputPathIds.forEach(id => {
-        this.lineList[id].remove()
-        delete this.lineList[id]
-      })
+    if (item.outputPathIds.size) {
+      item.outputPathIds.forEach((id) => {
+        this.lineList[id].remove();
+        delete this.lineList[id];
+      });
     }
   }
 
@@ -294,22 +305,22 @@ class Chart {
    * @private
    */
   _onKeyup() {
-    switch(d3.event.keyCode) {
+    switch (d3.event.keyCode) {
       case 8:
       case 46:
-        if(this.selectedLine) {
-          this.selectedLine.remove()
-          delete this.lineList[this.selectedLine.id]
-          this.selectedLine = null
+        if (this.selectedLine) {
+          this.selectedLine.remove();
+          delete this.lineList[this.selectedLine.id];
+          this.selectedLine = null;
         }
-        if(this.selectedItem) {
-          this.selectedItem.remove()
-          delete this.list[this.selectedItem.id]
-          this.selectedItem = null
+        if (this.selectedItem) {
+          this.selectedItem.remove();
+          delete this.list[this.selectedItem.id];
+          this.selectedItem = null;
         }
-        break
+        break;
     }
   }
 }
 
-export default Chart
+export default Chart;
